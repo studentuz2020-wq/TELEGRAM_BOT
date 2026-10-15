@@ -1,9 +1,11 @@
 services:
   - type: web
-    name: translate-bot
+    name: katastr-1a-hub
     runtime: docker
     plan: free
     healthCheckPath: /
     envVars:
       - key: BOT_TOKEN
         sync: false
+      - key: ADMIN_IDS
+        value: "7439478546"

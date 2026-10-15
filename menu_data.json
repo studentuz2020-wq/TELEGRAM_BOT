@@ -1,0 +1,168 @@
+{
+  "group": "Guruh raqami kiritilmagan",
+  "users": {
+    "7439478546": {
+      "joined": "2026-10-15",
+      "translations": 0,
+      "remind": true,
+      "name": "Jumabaev Toqtarbay",
+      "username": "qwertyz1026"
+    }
+  },
+  "subjects": [
+    {
+      "name": "🔬 Fizika",
+      "lectures": [
+        {
+          "title": "1-mavzu: Kinematika va dinamika",
+          "type": "text",
+          "content": "Materiallar tez orada qo'shiladi."
+        },
+        {
+          "title": "2-mavzu: Molekulyar fizika",
+          "type": "text",
+          "content": "Materiallar tez orada qo'shiladi."
+        }
+      ],
+      "labs": [
+        {
+          "title": "1-Lab: O'lchashlar va xatolar",
+          "type": "text",
+          "content": "Materiallar tez orada qo'shiladi."
+        },
+        {
+          "title": "2-Lab: Qattiq jism zichligi",
+          "type": "text",
+          "content": "Materiallar tez orada qo'shiladi."
+        }
+      ]
+    }
+  ],
+  "schedule": {
+    "0": [
+      {
+        "time": "09:00",
+        "name": "Fizika"
+      },
+      {
+        "time": "10:30",
+        "name": "Matematika"
+      }
+    ],
+    "1": [
+      {
+        "time": "09:00",
+        "name": "Ingliz tili"
+      }
+    ],
+    "2": [
+      {
+        "time": "09:00",
+        "name": "Fizika (Lab)"
+      }
+    ]
+  },
+  "announcements": [],
+  "exams": [],
+  "mates": [
+    {
+      "name": "Avezova Ziyada",
+      "role": "Kurator",
+      "tg": "Avezova_Ziyada",
+      "phone": "+998 91 395 08 76"
+    },
+    {
+      "name": "Abbaz Amaniyazov",
+      "role": "Starosta",
+      "tg": "AbbazAmaniyazov",
+      "phone": "+998 95 887 04 98"
+    },
+    {
+      "name": "Amandauletov Erbol Raxatovich"
+    },
+    {
+      "name": "Kuriyarov Pazilbek Sagindikovich"
+    },
+    {
+      "name": "Jumamuratov Arislanbek Oralbay uli"
+    },
+    {
+      "name": "Jumabayev Toqtarbay Ongarbayevich"
+    },
+    {
+      "name": "Amanjolov Erkebulan Amangeldi uli"
+    },
+    {
+      "name": "Xudaybergenov Tilewbergen Bayrambay uli"
+    },
+    {
+      "name": "Kojabaev Bayrambay Dauletbay uli"
+    },
+    {
+      "name": "Koblanbayev Nursultan Abay uli"
+    },
+    {
+      "name": "Seytbaev Esbergen Azat uli"
+    },
+    {
+      "name": "Babajanov Sardar Baxiyjan uli"
+    },
+    {
+      "name": "Maxsetbaev Nurlan Baxitbay uli"
+    },
+    {
+      "name": "Jumabayeva Gulmira Baxadir qizi"
+    },
+    {
+      "name": "Abilkasimov Jaqsiliq Karamatdin uli"
+    },
+    {
+      "name": "Bekniyazov Toreniyaz Salamatdin uli"
+    },
+    {
+      "name": "Begniyazova Miyasar Xojabay qizi"
+    },
+    {
+      "name": "Aytmuratov Tursinbek Anvarovich"
+    },
+    {
+      "name": "Jaumitbaev Jasur Baxadir uli"
+    },
+    {
+      "name": "Joldasbaev Aydos Saparbaevich"
+    },
+    {
+      "name": "Janabaev Hasilbek Omar uli"
+    },
+    {
+      "name": "Kosibaev Paluanatdin Kadirbay uli"
+    },
+    {
+      "name": "Otarbaev Alisher Ongarbay uli"
+    },
+    {
+      "name": "Sarsenbayev Sultanbek Kengesbay uli"
+    },
+    {
+      "name": "Jumamuratov Davletmurat Alimbay uli"
+    },
+    {
+      "name": "Uzaqbergenov Azizbek Quatbek uli"
+    },
+    {
+      "name": "Tileubaev Begis Tuelbaevich"
+    },
+    {
+      "name": "Seytbaev Sharapat Janabay uli"
+    },
+    {
+      "name": "Adenbaev Saydamin Abipnazar uli"
+    },
+    {
+      "name": "Kenesbaev Maxsud Nurlibay uli"
+    },
+    {
+      "name": "Kalbaev Karjaubay Nurlibay uli"
+    }
+  ]
+}
