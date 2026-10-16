@@ -263,19 +263,28 @@ def cloud_save(snapshot):
     r.raise_for_status()
 
 
+def _upgrade_data(data):
+    """Agar bazada eski namuna jadval qolib ketgan bo'lsa, yangisiga almashtiradi."""
+    d = default_data()
+    sch0 = (data.get("schedule") or {}).get("0") or []
+    if len(sch0) == 2 and sch0[0].get("name") == "Fizika" and not sch0[0].get("teacher"):
+        data["schedule"] = d["schedule"]
+    return data
+
+
 def load_data():
     if CLOUD:
         try:
             data = cloud_load()
             if data:
                 print("Ma'lumotlar Supabase'dan yuklandi.")
-                return data
+                return _upgrade_data(data)
         except Exception as e:
             print("Supabase'dan o'qib bo'lmadi:", e)
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, encoding="utf-8") as f:
-                return json.load(f)
+                return _upgrade_data(json.load(f))
         except Exception:
             pass
     return default_data()
@@ -317,13 +326,24 @@ def is_admin(uid):
 
 def register_user(user):
     with LOCK:
-        u = DATA["users"].setdefault(
-            str(user.id),
-            {"joined": datetime.now(TZ).strftime("%Y-%m-%d"), "translations": 0, "remind": True},
-        )
-        u["name"] = " ".join(x for x in [user.first_name, user.last_name] if x)
-        u["username"] = user.username or ""
-        save()
+        uid = str(user.id)
+        name = " ".join(x for x in [user.first_name, user.last_name] if x)
+        uname = user.username or ""
+        u = DATA["users"].get(uid)
+        if not u:
+            u = {
+                "joined": datetime.now(TZ).strftime("%Y-%m-%d"),
+                "translations": 0,
+                "remind": True,
+                "name": name,
+                "username": uname,
+            }
+            DATA["users"][uid] = u
+            save()
+        elif u.get("name") != name or u.get("username") != uname:
+            u["name"] = name
+            u["username"] = uname
+            save()
         return u
 
 
