@@ -291,6 +291,22 @@
     btn.classList.add('active');
   }
 
+  function fmtLessonRow(x) {
+    const t = x.end ? `${x.time} - ${x.end}` : x.time;
+    const tp = x.type ? ` <span class="badge" style="margin-left:4px;">${esc(x.type)}</span>` : '';
+    const sub = [
+      x.teacher ? `👩‍🏫 ${esc(x.teacher)}` : '',
+      x.room ? `🚪 ${esc(x.room)}` : ''
+    ].filter(Boolean).join(' • ');
+    return `<div class="item-row" style="align-items:flex-start;gap:8px;">
+      <div>
+        <div><b>${esc(x.name)}</b>${tp}</div>
+        ${sub ? `<div style="font-size:12px;color:var(--muted);margin-top:3px;">${sub}</div>` : ''}
+      </div>
+      <span class="time-pill" style="white-space:nowrap;">🕒 ${esc(t)}</span>
+    </div>`;
+  }
+
   function renderDay(idx) {
     selectedDay = idx;
     document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
@@ -301,9 +317,7 @@
       box.innerHTML = '<div style="color:var(--muted);font-size:14px;">🎉 Bu kunda dars kiritilmagan</div>';
       return;
     }
-    box.innerHTML = items.map(x =>
-      `<div class="item-row"><span>${esc(x.name)}</span><span class="time-pill">🕒 ${esc(x.time)}</span></div>`
-    ).join('');
+    box.innerHTML = items.map(fmtLessonRow).join('');
   }
 
   function renderMates() {
@@ -347,7 +361,7 @@
     document.getElementById('todayLabel').textContent = DAYS[selectedDay];
     const tItems = (APP.schedule[String(selectedDay)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
     document.getElementById('todayList').innerHTML = tItems.length
-      ? tItems.map(x => `<div class="item-row"><span>${esc(x.name)}</span><span class="time-pill">🕒 ${esc(x.time)}</span></div>`).join('')
+      ? tItems.map(fmtLessonRow).join('')
       : '<div style="color:var(--muted);font-size:14px;">Bugun dars yo‘q yoki dam olish kuni!</div>';
 
     // E'lonlar

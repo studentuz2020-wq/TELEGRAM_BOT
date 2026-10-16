@@ -120,9 +120,106 @@ def default_data():
             ],
         ],
         "schedule": {
-            "0": [{"time": "09:00", "name": "Fizika"}, {"time": "10:30", "name": "Matematika"}],
-            "1": [{"time": "09:00", "name": "Ingliz tili"}],
-            "2": [{"time": "09:00", "name": "Fizika (Lab)"}],
+            "0": [
+                {
+                    "time": "08:30",
+                    "end": "09:50",
+                    "name": "O'zbekistonning eng yangi tarixi",
+                    "type": "Ma'ruza",
+                    "teacher": "SARIBAYEVA N. B.",
+                    "room": "",
+                },
+                {
+                    "time": "10:00",
+                    "end": "11:20",
+                    "name": "Rus tili",
+                    "type": "Amaliy",
+                    "teacher": "DJOLDASOVA S. A.",
+                    "room": "308 3-korpus",
+                },
+                {
+                    "time": "11:30",
+                    "end": "12:50",
+                    "name": "Fizika",
+                    "type": "Ma'ruza",
+                    "teacher": "SAPARNIYAZOVA G. K.",
+                    "room": "",
+                },
+            ],
+            "1": [
+                {
+                    "time": "08:30",
+                    "end": "09:50",
+                    "name": "Qoraqalpoq tili",
+                    "type": "Amaliy",
+                    "teacher": "KUNNAZAROVA SH. M.",
+                    "room": "",
+                },
+                {
+                    "time": "10:00",
+                    "end": "11:20",
+                    "name": "Rus tili",
+                    "type": "Amaliy",
+                    "teacher": "DJOLDASOVA S. A.",
+                    "room": "308 3-korpus",
+                },
+            ],
+            "2": [
+                {
+                    "time": "08:30",
+                    "end": "09:50",
+                    "name": "O'zbekistonning eng yangi tarixi",
+                    "type": "Seminar",
+                    "teacher": "SARIBAYEVA N. B.",
+                    "room": "",
+                },
+                {
+                    "time": "10:00",
+                    "end": "11:20",
+                    "name": "Oliy matematika",
+                    "type": "Amaliy",
+                    "teacher": "BEKIYEV A. B.",
+                    "room": "308 3-korpus",
+                },
+            ],
+            "3": [
+                {
+                    "time": "10:00",
+                    "end": "11:20",
+                    "name": "Fizika",
+                    "type": "Laboratoriya",
+                    "teacher": "SAPARNIYAZOVA G. K.",
+                    "room": "",
+                },
+                {
+                    "time": "11:30",
+                    "end": "12:50",
+                    "name": "Oliy matematika",
+                    "type": "Amaliy",
+                    "teacher": "BEKIYEV A. B.",
+                    "room": "308 3-korpus",
+                },
+            ],
+            "4": [
+                {
+                    "time": "08:30",
+                    "end": "09:50",
+                    "name": "Oliy matematika",
+                    "type": "Ma'ruza",
+                    "teacher": "BEGLERBEKOV R. J.",
+                    "room": "",
+                },
+                {
+                    "time": "10:00",
+                    "end": "11:20",
+                    "name": "Fizika",
+                    "type": "Laboratoriya",
+                    "teacher": "SAPARNIYAZOVA G. K.",
+                    "room": "",
+                },
+            ],
+            "5": [],
+            "6": [],
         },
         "announcements": [],
         "exams": [],
@@ -377,11 +474,25 @@ def admin_cmd(message):
 
 
 # ---------- Jadval ----------
+def fmt_lesson(x):
+    t = f"{x['time']} - {x['end']}" if x.get("end") else x["time"]
+    tp = f" ({html.escape(x['type'])})" if x.get("type") else ""
+    line = f"🕒 <b>{html.escape(t)}</b> — <b>{html.escape(x['name'])}</b>{tp}"
+    details = []
+    if x.get("teacher"):
+        details.append(f"👩‍🏫 {html.escape(x['teacher'])}")
+    if x.get("room"):
+        details.append(f"🚪 {html.escape(x['room'])}")
+    if details:
+        line += "\n     " + " • ".join(details)
+    return line
+
+
 def fmt_day(i):
     items = sorted(DATA["schedule"].get(str(i), []), key=lambda x: x["time"])
     if not items:
         return "— dars yo'q"
-    return "\n".join(f"🕒 {x['time']} — {html.escape(x['name'])}" for x in items)
+    return "\n".join(fmt_lesson(x) for x in items)
 
 
 def week_text():
