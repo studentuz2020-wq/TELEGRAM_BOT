@@ -130,7 +130,51 @@ def default_data():
     }
 
 
+SUPABASE_URL = (os.getenv("SUPABASE_URL") or "").rstrip("/")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or ""
+CLOUD = bool(SUPABASE_URL and SUPABASE_KEY)
+CLOUD_HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
+CLOUD_ENDPOINT = f"{SUPABASE_URL}/rest/v1/bot_data"
+
+
+def cloud_load():
+    import requests
+
+    r = requests.get(
+        CLOUD_ENDPOINT, headers=CLOUD_HEADERS,
+        params={"id": "eq.1", "select": "data"}, timeout=15,
+    )
+    r.raise_for_status()
+    rows = r.json()
+    return rows[0]["data"] if rows else None
+
+
+def cloud_save(snapshot):
+    import requests
+
+    r = requests.post(
+        CLOUD_ENDPOINT,
+        headers={**CLOUD_HEADERS, "Prefer": "resolution=merge-duplicates"},
+        params={"on_conflict": "id"},
+        data=json.dumps({"id": 1, "data": snapshot}, ensure_ascii=False).encode("utf-8"),
+        timeout=15,
+    )
+    r.raise_for_status()
+
+
 def load_data():
+    if CLOUD:
+        try:
+            data = cloud_load()
+            if data:
+                print("Ma'lumotlar Supabase'dan yuklandi.")
+                return data
+        except Exception as e:
+            print("Supabase'dan o'qib bo'lmadi:", e)
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, encoding="utf-8") as f:
@@ -141,6 +185,7 @@ def load_data():
 
 
 DATA = load_data()
+_dirty = threading.Event()
 
 
 def save():
@@ -149,6 +194,24 @@ def save():
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(DATA, f, ensure_ascii=False, indent=2)
         os.replace(tmp, DATA_FILE)
+    if CLOUD:
+        _dirty.set()
+
+
+def cloud_sync_loop():
+    """O'zgarishlarni fonda Supabase'ga yozadi (bot kutib qolmasligi uchun)."""
+    while True:
+        _dirty.wait()
+        time.sleep(2)  # ketma-ket o'zgarishlarni bitta yozuvga birlashtiradi
+        _dirty.clear()
+        try:
+            with LOCK:
+                snapshot = json.loads(json.dumps(DATA))
+            cloud_save(snapshot)
+        except Exception as e:
+            print("Supabase'ga yozib bo'lmadi:", e)
+            _dirty.set()
+            time.sleep(10)
 
 
 def is_admin(uid):
@@ -734,6 +797,9 @@ if __name__ == "__main__":
         except Exception as e:
             print("Profil sozlanmadi:", e)
     threading.Thread(target=reminder_loop, daemon=True).start()
+    if CLOUD:
+        threading.Thread(target=cloud_sync_loop, daemon=True).start()
+        _dirty.set()  # birinchi marta mahalliy ma'lumotni bulutga yozib qo'yadi
     print("Bot muvaffaqiyatli ishga tushdi...")
     bot.infinity_polling()
 

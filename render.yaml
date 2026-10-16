@@ -9,3 +9,7 @@ services:
         sync: false
       - key: ADMIN_IDS
         value: "7439478546"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
