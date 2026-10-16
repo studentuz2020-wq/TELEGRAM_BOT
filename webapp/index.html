@@ -395,15 +395,24 @@
     renderDay(selectedDay);
 
     // Fanlar
-    document.getElementById('subjectsContainer').innerHTML = APP.subjects.map(s => {
-      const lecs = (s.lectures || []).map(it =>
-        `<div class="sub-item">📖 <b>${esc(it.title)}</b><small>${it.type === 'text' ? esc(it.content) : '📎 Fayl bot ichida mavjud'}</small></div>`
-      ).join('');
-      const labs = (s.labs || []).map(it =>
-        `<div class="sub-item">🧪 <b>${esc(it.title)}</b><small>${it.type === 'text' ? esc(it.content) : '📎 Fayl bot ichida mavjud'}</small></div>`
-      ).join('');
+    document.getElementById('subjectsContainer').innerHTML = APP.subjects.map((s, si) => {
+      const isPhys = s.name.toLowerCase().includes('fizika');
+      const isSingle = !!s.single;
+      const secIcon = isPhys ? '🧪' : '📝';
+      const secShort = isPhys ? 'lab' : 'amaliy';
+      const fmtItem = (it, k, ji, ic) => {
+        const body = it.type === 'text'
+          ? `<small>${esc(it.content)}</small>`
+          : `<small><a class="contact-link" href="/api/file?s=${si}&k=${k}&j=${ji}" target="_blank">📄 Ochish / Yuklab olish ↗</a></small>`;
+        return `<div class="sub-item">${ic} <b>${esc(it.title)}</b>${body}</div>`;
+      };
+      const lecs = (s.lectures || []).map((it, ji) => fmtItem(it, 'l', ji, '📖')).join('');
+      const labs = (s.labs || []).map((it, ji) => fmtItem(it, 'b', ji, secIcon)).join('');
+      const badgeText = isSingle
+        ? `${(s.lectures||[]).length} ta material`
+        : `${(s.lectures||[]).length} ma'ruza • ${(s.labs||[]).length} ${secShort}`;
       return `<div class="card">
-        <h3><span>${esc(s.name)}</span><span class="badge">${(s.lectures||[]).length} ma'ruza • ${(s.labs||[]).length} lab</span></h3>
+        <h3><span>${esc(s.name)}</span><span class="badge">${badgeText}</span></h3>
         <div class="sub-list">${lecs || labs ? lecs + labs : '<small style="color:var(--muted)">Materiallar tez orada qo‘shiladi</small>'}</div>
       </div>`;
     }).join('');

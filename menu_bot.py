@@ -546,11 +546,17 @@ def profile_view(uid):
     return text, m
 
 
+def second_section(subj_name):
+    if "fizika" in subj_name.lower():
+        return "🧪", "Laboratoriya"
+    return "📝", "Amaliy mashg'ulotlar"
+
+
 # ---------- Admin ----------
 def admin_menu():
     return kb(
-        btn("➕ Ma'ruza qo'shish", "adm_add:lectures"),
-        btn("➕ Laboratoriya qo'shish", "adm_add:labs"),
+        btn("➕ Ma'ruza qo'shish (PDF/matn)", "adm_add:lectures"),
+        btn("➕ Amaliy / Lab qo'shish (PDF/matn)", "adm_add:labs"),
         btn("📚 Yangi fan qo'shish", "adm_subject"),
         btn("📅 Kun jadvalini o'zgartirish", "adm_sched"),
         btn("📢 E'lon yuborish", "adm_ann"),
@@ -559,6 +565,7 @@ def admin_menu():
         btn("🗑 E'lonlarni tozalash", "adm_clear:ann"),
         btn("👥 Guruhdosh qo'shish", "adm_mate"),
         btn("🎓 Guruh nomini o'zgartirish", "adm_group"),
+        btn("🔄 Bazadan yangilash", "adm_reload"),
         btn("📊 Statistika", "adm_stats"),
         btn("⬅️ Orqaga", "back_to_main"),
     )
@@ -725,6 +732,12 @@ def handle_admin(call):
         ask(chat_id, "Format: Ism Familiya, @nik, telefon(ixtiyoriy)", step_mate)
     elif data == "adm_group":
         ask(chat_id, "Guruh nomi/raqamini yuboring:", step_group)
+    elif data == "adm_reload":
+        with LOCK:
+            fresh = load_data()
+            DATA.clear()
+            DATA.update(fresh)
+        bot.send_message(chat_id, "✅ Ma'lumotlar bazadan yangilandi.", reply_markup=admin_menu())
     elif data == "adm_stats":
         users = DATA["users"].values()
         tr = sum(u.get("translations", 0) for u in users)
@@ -770,17 +783,25 @@ def callback_handler(call):
     elif data.startswith("s:"):
         i = int(data[2:])
         s = DATA["subjects"][i]
-        show(call, header("📚", html.escape(s["name"])) + "Bo'limni tanlang:", kb(
-            btn(f"📖 Ma'ruzalar ({len(s['lectures'])})", f"sl:{i}"),
-            btn(f"🧪 Laboratoriya ({len(s['labs'])})", f"sb:{i}"),
-            btn("⬅️ Fanlarga qaytish", "menu_subjects")))
+        if s.get("single"):
+            items = s.get("lectures") or []
+            body = "Materialni tanlang (ustiga bossangiz fayl ochiladi):" if items else "Hali qo'shilmagan."
+            show(call, header("📚", html.escape(s["name"])) + body, kb(
+                *[btn(it["title"], f"it:{i}:l:{j}") for j, it in enumerate(items)],
+                btn("⬅️ Fanlarga qaytish", "menu_subjects")))
+        else:
+            sec_icon, sec_name = second_section(s["name"])
+            show(call, header("📚", html.escape(s["name"])) + "Bo'limni tanlang:", kb(
+                btn(f"📖 Ma'ruzalar ({len(s['lectures'])})", f"sl:{i}"),
+                btn(f"{sec_icon} {sec_name} ({len(s['labs'])})", f"sb:{i}"),
+                btn("⬅️ Fanlarga qaytish", "menu_subjects")))
 
     elif data.startswith(("sl:", "sb:")):
         i = int(data[3:])
         kind = "lectures" if data.startswith("sl:") else "labs"
         s = DATA["subjects"][i]
-        icon, name = ("📖", "Ma'ruzalar") if kind == "lectures" else ("🧪", "Laboratoriya ishlari")
-        body = "Mavzuni tanlang:" if s[kind] else "Hali qo'shilmagan."
+        icon, name = ("📖", "Ma'ruzalar") if kind == "lectures" else second_section(s["name"])
+        body = "Mavzuni tanlang (ustiga bossangiz fayl yuboriladi):" if s[kind] else "Hali qo'shilmagan."
         show(call, header(icon, f"{html.escape(s['name'])} — {name}") + body, kb(
             *[btn(it["title"], f"it:{i}:{kind[0]}:{j}") for j, it in enumerate(s[kind])],
             btn("⬅️ Orqaga", f"s:{i}")))
@@ -950,6 +971,32 @@ def start_health_server():
                     json.dumps(payload, ensure_ascii=False).encode("utf-8"),
                     "application/json; charset=utf-8",
                 )
+            elif path == "/api/file":
+                import requests
+
+                qs = parse_qs(parsed.query)
+                try:
+                    si = int((qs.get("s") or ["0"])[0])
+                    k = (qs.get("k") or ["l"])[0]
+                    ji = int((qs.get("j") or ["0"])[0])
+                    kind = "lectures" if k == "l" else "labs"
+                    item = DATA["subjects"][si][kind][ji]
+                    finfo = bot.get_file(item["content"])
+                    furl = f"https://api.telegram.org/file/bot{TOKEN}/{finfo.file_path}"
+                    resp = requests.get(furl, timeout=30)
+                    resp.raise_for_status()
+                    ext = os.path.splitext(finfo.file_path)[1].lower()
+                    ctype = "application/pdf" if ext == ".pdf" else (
+                        "image/jpeg" if ext in (".jpg", ".jpeg") else "application/octet-stream"
+                    )
+                    self.send_response(200)
+                    self.send_header("Content-Type", ctype)
+                    fname = os.path.basename(finfo.file_path)
+                    self.send_header("Content-Disposition", f'inline; filename="{fname}"')
+                    self.end_headers()
+                    self.wfile.write(resp.content)
+                except Exception:
+                    self._send(404, b"Fayl topilmadi")
             elif path == "/api/translate":
                 qs = parse_qs(parsed.query)
                 src = (qs.get("src") or ["uz"])[0]
