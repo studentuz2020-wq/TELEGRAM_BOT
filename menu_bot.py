@@ -260,7 +260,18 @@ def header(icon, title):
     return f"{icon} <b>{title}</b>\n{LINE}\n"
 
 
+WEBAPP_URL = (os.getenv("WEBAPP_URL") or os.getenv("RENDER_EXTERNAL_URL") or "").rstrip("/")
+WEBAPP_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "webapp", "index.html")
+
+
 def main_menu(uid=None):
+    m = types.InlineKeyboardMarkup(row_width=2)
+    if WEBAPP_URL.startswith("https://"):
+        m.add(
+            types.InlineKeyboardButton(
+                "📱 Mini Ilovani ochish", web_app=types.WebAppInfo(url=f"{WEBAPP_URL}/app")
+            )
+        )
     b = [
         btn("📚 Fanlar", "menu_subjects"),
         btn("📅 Jadval", "menu_schedule"),
@@ -273,7 +284,8 @@ def main_menu(uid=None):
     ]
     if uid is not None and is_admin(uid):
         b.append(btn("🛠 Admin panel", "adm"))
-    return kb(*b, width=2)
+    m.add(*b)
+    return m
 
 
 def show(call, text, markup=None):
@@ -760,17 +772,66 @@ def reminder_loop():
 
 
 def start_health_server():
-    """Hosting (Render) PORT bersa, oddiy HTTP server ishga tushiradi."""
+    """Hosting (Render) PORT bersa, Mini App va API serverini ishga tushiradi."""
     port = os.getenv("PORT")
     if not port:
         return
     from http.server import BaseHTTPRequestHandler, HTTPServer
+    from urllib.parse import parse_qs, urlparse
 
     class Handler(BaseHTTPRequestHandler):
-        def do_GET(self):
-            self.send_response(200)
+        def _send(self, code, body, ctype="text/plain; charset=utf-8"):
+            self.send_response(code)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Cache-Control", "no-store")
             self.end_headers()
-            self.wfile.write(b"OK")
+            self.wfile.write(body)
+
+        def do_GET(self):
+            parsed = urlparse(self.path)
+            path = parsed.path
+            if path in ("/", "/app", "/index.html"):
+                if os.path.exists(WEBAPP_FILE):
+                    with open(WEBAPP_FILE, "rb") as f:
+                        self._send(200, f.read(), "text/html; charset=utf-8")
+                else:
+                    self._send(200, b"OK")
+            elif path == "/assets/banner.jpg" and os.path.exists(BANNER):
+                with open(BANNER, "rb") as f:
+                    self._send(200, f.read(), "image/jpeg")
+            elif path == "/api/data":
+                with LOCK:
+                    payload = {
+                        "group": DATA.get("group", "Katastr 1-a"),
+                        "subjects": DATA.get("subjects", []),
+                        "schedule": DATA.get("schedule", {}),
+                        "announcements": DATA.get("announcements", []),
+                        "exams": DATA.get("exams", []),
+                        "mates": DATA.get("mates", []),
+                        "leaders": {
+                            "curator": CURATOR,
+                            "starosta": STAROSTA,
+                            "creator": CREATOR,
+                        },
+                    }
+                self._send(
+                    200,
+                    json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                    "application/json; charset=utf-8",
+                )
+            elif path == "/api/translate":
+                qs = parse_qs(parsed.query)
+                src = (qs.get("src") or ["uz"])[0]
+                dest = (qs.get("dest") or ["en"])[0]
+                q = (qs.get("q") or [""])[0]
+                try:
+                    res = GoogleTranslator(source=src, target=dest).translate(q) if q else ""
+                    body = json.dumps({"result": res}, ensure_ascii=False).encode("utf-8")
+                except Exception:
+                    body = json.dumps({"error": "Tarjima qilishda xatolik"}).encode("utf-8")
+                self._send(200, body, "application/json; charset=utf-8")
+            else:
+                self._send(200, b"OK")
 
         def do_HEAD(self):
             self.send_response(200)

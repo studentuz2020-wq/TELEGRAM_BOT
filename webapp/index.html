@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Katastr 1-A Hub</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --bg: #0b1320;
+    --bg2: #111d30;
+    --card: rgba(22, 36, 58, 0.85);
+    --border: rgba(212, 175, 55, 0.22);
+    --gold: #e6c15a;
+    --emerald: #10b981;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at top, #132842 0%, var(--bg) 70%);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 84px;
+  }
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 16px 14px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(230, 193, 90, 0.12));
+    border-bottom: 1px solid var(--border);
+  }
+  .hero img {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    border: 1.5px solid var(--gold);
+    object-fit: cover;
+  }
+  .hero h1 { font-size: 19px; font-weight: 700; color: var(--gold); }
+  .hero p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .container { padding: 14px 16px; }
+  .section { display: none; animation: fade .2s ease; }
+  .section.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .stat b { display: block; font-size: 20px; color: var(--gold); }
+  .stat span { font-size: 11px; color: var(--muted); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .card h3 { font-size: 15px; color: var(--gold); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+    font-weight: 600;
+  }
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+  }
+  .item-row:last-child { border-bottom: none; }
+  .time-pill {
+    font-weight: 600;
+    color: var(--emerald);
+    background: rgba(16, 185, 129, 0.12);
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .days-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .days-bar::-webkit-scrollbar { display: none; }
+  .day-btn {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--muted);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .day-btn.active {
+    background: var(--gold);
+    color: #0b1320;
+    font-weight: 700;
+    border-color: var(--gold);
+  }
+  .search {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 14px;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  textarea {
+    width: 100%;
+    min-height: 92px;
+    padding: 11px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+  }
+  select, .btn-primary {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 14px;
+    margin: 8px 0;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #c99b2e);
+    color: #0b1320;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+  .sub-list { margin-top: 8px; padding-left: 4px; }
+  .sub-item {
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 13px;
+  }
+  .sub-item small { display: block; color: var(--muted); margin-top: 3px; }
+  .contact-link { color: var(--emerald); text-decoration: none; font-size: 13px; }
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(11, 19, 32, 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 6px 4px 10px;
+    z-index: 20;
+  }
+  .nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+  }
+  .nav button span.ic { font-size: 19px; }
+  .nav button.active { color: var(--gold); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="/assets/banner.jpg" alt="Katastr 1-A" onerror="this.style.display='none'" />
+  <div>
+    <h1 id="botName">Katastr 1-A Hub</h1>
+    <p id="groupName">🎓 Katastr 1-a • Talaba ilovasi</p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- BOSH SAHIFA -->
+  <div class="section active" id="tab-home">
+    <div class="grid-stats">
+      <div class="stat"><b id="stSubjects">0</b><span>Fanlar</span></div>
+      <div class="stat"><b id="stMates">0</b><span>Talabalar</span></div>
+      <div class="stat"><b id="stExams">0</b><span>Imtihonlar</span></div>
+    </div>
+
+    <div class="card">
+      <h3><span>🕒 Bugungi darslar</span><span class="badge" id="todayLabel">Bugun</span></h3>
+      <div id="todayList">Yuklanmoqda...</div>
+    </div>
+
+    <div class="card">
+      <h3><span>📢 So'nggi e'lonlar</span></h3>
+      <div id="annList">E'lonlar yo'q.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>📝 Yaqin imtihonlar</span></h3>
+      <div id="examList">Rejalashtirilgan imtihon yo'q.</div>
+    </div>
+
+    <div class="card" id="leadersCard"></div>
+  </div>
+
+  <!-- JADVAL -->
+  <div class="section" id="tab-schedule">
+    <div class="days-bar" id="daysBar"></div>
+    <div class="card">
+      <h3 id="selDayTitle">Dushanba</h3>
+      <div id="daySchedule"></div>
+    </div>
+  </div>
+
+  <!-- FANLAR -->
+  <div class="section" id="tab-subjects">
+    <div id="subjectsContainer"></div>
+  </div>
+
+  <!-- GURUHDOSHLAR -->
+  <div class="section" id="tab-mates">
+    <input class="search" id="mateSearch" placeholder="🔍 Ism bo'yicha qidirish..." oninput="renderMates()" />
+    <div class="card" id="matesContainer"></div>
+  </div>
+
+  <!-- TARJIMON -->
+  <div class="section" id="tab-translate">
+    <div class="card">
+      <h3>🌐 Tezkor tarjimon</h3>
+      <select id="trPair">
+        <option value="uz|en">🇺🇿 O'zbekcha → 🇬🇧 Inglizcha</option>
+        <option value="en|uz">🇬🇧 Inglizcha → 🇺🇿 O'zbekcha</option>
+        <option value="ru|uz">🇷🇺 Ruscha → 🇺🇿 O'zbekcha</option>
+        <option value="uz|ru">🇺🇿 O'zbekcha → 🇷🇺 Ruscha</option>
+      </select>
+      <textarea id="trInput" placeholder="Matnni kiriting..."></textarea>
+      <button class="btn-primary" onclick="doTranslate()" id="trBtn">Tarjima qilish</button>
+      <div id="trOutput" style="margin-top:10px; font-size:14px; white-space:pre-wrap;"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="active" onclick="switchTab('home', this)"><span class="ic">🏠</span>Asosiy</button>
+  <button onclick="switchTab('schedule', this)"><span class="ic">📅</span>Jadval</button>
+  <button onclick="switchTab('subjects', this)"><span class="ic">📚</span>Fanlar</button>
+  <button onclick="switchTab('mates', this)"><span class="ic">👥</span>Guruh</button>
+  <button onclick="switchTab('translate', this)"><span class="ic">🌐</span>Tarjima</button>
+</nav>
+
+<script>
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  const DAYS = ["Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba","Yakshanba"];
+  let APP = null;
+  let selectedDay = (new Date().getDay() + 6) % 7;
+
+  function esc(s) {
+    return String(s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function switchTab(name, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function renderDay(idx) {
+    selectedDay = idx;
+    document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.getElementById('selDayTitle').textContent = DAYS[idx];
+    const items = (APP.schedule[String(idx)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
+    const box = document.getElementById('daySchedule');
+    if (!items.length) {
+      box.innerHTML = '<div style="color:var(--muted);font-size:14px;">🎉 Bu kunda dars kiritilmagan</div>';
+      return;
+    }
+    box.innerHTML = items.map(x =>
+      `<div class="item-row"><span>${esc(x.name)}</span><span class="time-pill">🕒 ${esc(x.time)}</span></div>`
+    ).join('');
+  }
+
+  function renderMates() {
+    if (!APP) return;
+    const q = (document.getElementById('mateSearch').value || '').toLowerCase();
+    let n = 0;
+    const rows = APP.mates.filter(m => m.name.toLowerCase().includes(q)).map(m => {
+      const label = m.role ? `⭐ <b>${esc(m.role)}:</b> ${esc(m.name)}` : `${++n}. ${esc(m.name)}`;
+      const tgLink = m.tg ? `<a class="contact-link" href="https://t.me/${esc(m.tg)}">@${esc(m.tg)}</a>` : '';
+      return `<div class="item-row"><span>${label}</span>${tgLink}</div>`;
+    });
+    document.getElementById('matesContainer').innerHTML = rows.join('') || '<div style="color:var(--muted)">Topilmadi</div>';
+  }
+
+  async function doTranslate() {
+    const text = document.getElementById('trInput').value.trim();
+    if (!text) return;
+    const [src, dest] = document.getElementById('trPair').value.split('|');
+    const btn = document.getElementById('trBtn');
+    const out = document.getElementById('trOutput');
+    btn.textContent = 'Tarjima qilinmoqda...';
+    try {
+      const r = await fetch(`/api/translate?src=${src}&dest=${dest}&q=${encodeURIComponent(text)}`);
+      const d = await r.json();
+      out.textContent = d.result || d.error || 'Xatolik';
+    } catch (e) {
+      out.textContent = 'Xatolik yuz berdi.';
+    }
+    btn.textContent = 'Tarjima qilish';
+  }
+
+  async function load() {
+    const r = await fetch('/api/data');
+    APP = await r.json();
+    document.getElementById('groupName').textContent = `🎓 ${APP.group} • Rasmiy Mini Ilova`;
+    document.getElementById('stSubjects').textContent = APP.subjects.length;
+    document.getElementById('stMates').textContent = APP.mates.filter(m => !m.role).length;
+    document.getElementById('stExams').textContent = APP.exams.length;
+
+    // Bugungi darslar
+    document.getElementById('todayLabel').textContent = DAYS[selectedDay];
+    const tItems = (APP.schedule[String(selectedDay)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
+    document.getElementById('todayList').innerHTML = tItems.length
+      ? tItems.map(x => `<div class="item-row"><span>${esc(x.name)}</span><span class="time-pill">🕒 ${esc(x.time)}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:14px;">Bugun dars yo‘q yoki dam olish kuni!</div>';
+
+    // E'lonlar
+    const anns = (APP.announcements || []).slice(-5).reverse();
+    if (anns.length) {
+      document.getElementById('annList').innerHTML = anns.map(a =>
+        `<div class="sub-item"><b>🗓 ${esc(a.date)}</b><small>${a.text}</small></div>`
+      ).join('');
+    }
+
+    // Imtihonlar
+    if ((APP.exams || []).length) {
+      document.getElementById('examList').innerHTML = APP.exams.map(e =>
+        `<div class="item-row"><span>📝 ${esc(e.name)}</span><span class="badge">${esc(e.date)}</span></div>`
+      ).join('');
+    }
+
+    // Mas'ullar
+    const L = APP.leaders;
+    document.getElementById('leadersCard').innerHTML = `
+      <h3><span>ℹ️ Guruh mas'ullari</span></h3>
+      <div class="item-row"><span>👩‍🏫 Kurator: <b>${esc(L.curator.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.curator.tg)}">@${esc(L.curator.tg)}</a></div>
+      <div class="item-row"><span>⭐ Starosta: <b>${esc(L.starosta.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.starosta.tg)}">@${esc(L.starosta.tg)}</a></div>
+      <div class="item-row"><span>💻 Yaratuvchi: <b>${esc(L.creator.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.creator.tg)}">@${esc(L.creator.tg)}</a></div>
+    `;
+
+    // Kunlar
+    document.getElementById('daysBar').innerHTML = DAYS.map((d, i) =>
+      `<button class="day-btn" onclick="renderDay(${i})">${d}</button>`
+    ).join('');
+    renderDay(selectedDay);
+
+    // Fanlar
+    document.getElementById('subjectsContainer').innerHTML = APP.subjects.map(s => {
+      const lecs = (s.lectures || []).map(it =>
+        `<div class="sub-item">📖 <b>${esc(it.title)}</b><small>${it.type === 'text' ? esc(it.content) : '📎 Fayl bot ichida mavjud'}</small></div>`
+      ).join('');
+      const labs = (s.labs || []).map(it =>
+        `<div class="sub-item">🧪 <b>${esc(it.title)}</b><small>${it.type === 'text' ? esc(it.content) : '📎 Fayl bot ichida mavjud'}</small></div>`
+      ).join('');
+      return `<div class="card">
+        <h3><span>${esc(s.name)}</span><span class="badge">${(s.lectures||[]).length} ma'ruza • ${(s.labs||[]).length} lab</span></h3>
+        <div class="sub-list">${lecs || labs ? lecs + labs : '<small style="color:var(--muted)">Materiallar tez orada qo‘shiladi</small>'}</div>
+      </div>`;
+    }).join('');
+
+    renderMates();
+  }
+  load();
+</script>
+</body>
+</html>
