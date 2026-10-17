@@ -196,7 +196,7 @@
   <img src="/assets/banner.jpg" alt="Katastr 1-A" onerror="this.style.display='none'" />
   <div>
     <h1 id="botName">Katastr 1-A Hub</h1>
-    <p id="groupName">🎓 Katastr 1-a • Talaba ilovasi</p>
+    <p id="groupName">🎓 Katastr 1-a • Studentler qollanbası</p>
   </div>
 </div>
 
@@ -204,24 +204,24 @@
   <!-- BOSH SAHIFA -->
   <div class="section active" id="tab-home">
     <div class="grid-stats">
-      <div class="stat"><b id="stSubjects">0</b><span>Fanlar</span></div>
-      <div class="stat"><b id="stMates">0</b><span>Talabalar</span></div>
-      <div class="stat"><b id="stExams">0</b><span>Imtihonlar</span></div>
+      <div class="stat"><b id="stSubjects">0</b><span>Pánler</span></div>
+      <div class="stat"><b id="stMates">0</b><span>Studentler</span></div>
+      <div class="stat"><b id="stExams">0</b><span>Imtixanlar</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🕒 Bugungi darslar</span><span class="badge" id="todayLabel">Bugun</span></h3>
-      <div id="todayList">Yuklanmoqda...</div>
+      <h3><span>🕒 Búgingi sabaqlar</span><span class="badge" id="todayLabel">Búgin</span></h3>
+      <div id="todayList">Júklenbekte...</div>
     </div>
 
     <div class="card">
-      <h3><span>📢 So'nggi e'lonlar</span></h3>
-      <div id="annList">E'lonlar yo'q.</div>
+      <h3><span>📢 Sońǵı daǵazalar</span></h3>
+      <div id="annList">Daǵazalar joq.</div>
     </div>
 
     <div class="card">
-      <h3><span>📝 Yaqin imtihonlar</span></h3>
-      <div id="examList">Rejalashtirilgan imtihon yo'q.</div>
+      <h3><span>📝 Jaqın imtixanlar</span></h3>
+      <div id="examList">Rejelestirilgen imtixan joq.</div>
     </div>
 
     <div class="card" id="leadersCard"></div>
@@ -231,7 +231,7 @@
   <div class="section" id="tab-schedule">
     <div class="days-bar" id="daysBar"></div>
     <div class="card">
-      <h3 id="selDayTitle">Dushanba</h3>
+      <h3 id="selDayTitle">Dúyshembi</h3>
       <div id="daySchedule"></div>
     </div>
   </div>
@@ -243,40 +243,40 @@
 
   <!-- GURUHDOSHLAR -->
   <div class="section" id="tab-mates">
-    <input class="search" id="mateSearch" placeholder="🔍 Ism bo'yicha qidirish..." oninput="renderMates()" />
+    <input class="search" id="mateSearch" placeholder="🔍 Atı boyınsha izlew..." oninput="renderMates()" />
     <div class="card" id="matesContainer"></div>
   </div>
 
   <!-- TARJIMON -->
   <div class="section" id="tab-translate">
     <div class="card">
-      <h3>🌐 Tezkor tarjimon</h3>
+      <h3>🌐 Tez awdarmashı</h3>
       <select id="trPair">
-        <option value="uz|en">🇺🇿 O'zbekcha → 🇬🇧 Inglizcha</option>
-        <option value="en|uz">🇬🇧 Inglizcha → 🇺🇿 O'zbekcha</option>
-        <option value="ru|uz">🇷🇺 Ruscha → 🇺🇿 O'zbekcha</option>
-        <option value="uz|ru">🇺🇿 O'zbekcha → 🇷🇺 Ruscha</option>
+        <option value="uz|en">🇺🇿 Qaraqalpaqsha / Ózbekshe → 🇬🇧 Inglisshe</option>
+        <option value="en|uz">🇬🇧 Inglisshe → 🇺🇿 Qaraqalpaqsha / Ózbekshe</option>
+        <option value="ru|uz">🇷🇺 Orıssha → 🇺🇿 Qaraqalpaqsha / Ózbekshe</option>
+        <option value="uz|ru">🇺🇿 Qaraqalpaqsha / Ózbekshe → 🇷🇺 Orıssha</option>
       </select>
-      <textarea id="trInput" placeholder="Matnni kiriting..."></textarea>
-      <button class="btn-primary" onclick="doTranslate()" id="trBtn">Tarjima qilish</button>
+      <textarea id="trInput" placeholder="Tekstti kiritiń..."></textarea>
+      <button class="btn-primary" onclick="doTranslate()" id="trBtn">Awdarma qılıw</button>
       <div id="trOutput" style="margin-top:10px; font-size:14px; white-space:pre-wrap;"></div>
     </div>
   </div>
 </div>
 
 <nav class="nav">
-  <button class="active" onclick="switchTab('home', this)"><span class="ic">🏠</span>Asosiy</button>
-  <button onclick="switchTab('schedule', this)"><span class="ic">📅</span>Jadval</button>
-  <button onclick="switchTab('subjects', this)"><span class="ic">📚</span>Fanlar</button>
-  <button onclick="switchTab('mates', this)"><span class="ic">👥</span>Guruh</button>
-  <button onclick="switchTab('translate', this)"><span class="ic">🌐</span>Tarjima</button>
+  <button class="active" onclick="switchTab('home', this)"><span class="ic">🏠</span>Bas bet</button>
+  <button onclick="switchTab('schedule', this)"><span class="ic">📅</span>Keste</button>
+  <button onclick="switchTab('subjects', this)"><span class="ic">📚</span>Pánler</button>
+  <button onclick="switchTab('mates', this)"><span class="ic">👥</span>Gruppa</button>
+  <button onclick="switchTab('translate', this)"><span class="ic">🌐</span>Awdarma</button>
 </nav>
 
 <script>
   const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) { tg.ready(); tg.expand(); }
 
-  const DAYS = ["Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba","Yakshanba"];
+  const DAYS = ["Dúyshembi","Siyshembi","Sárshembi","Piyshembi","Juma","Shembi","Ekshembi"];
   let APP = null;
   let selectedDay = (new Date().getDay() + 6) % 7;
 
@@ -314,7 +314,7 @@
     const items = (APP.schedule[String(idx)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
     const box = document.getElementById('daySchedule');
     if (!items.length) {
-      box.innerHTML = '<div style="color:var(--muted);font-size:14px;">🎉 Bu kunda dars kiritilmagan</div>';
+      box.innerHTML = '<div style="color:var(--muted);font-size:14px;">🎉 Bul kúnde sabaq joq</div>';
       return;
     }
     box.innerHTML = items.map(fmtLessonRow).join('');
@@ -329,7 +329,7 @@
       const tgLink = m.tg ? `<a class="contact-link" href="https://t.me/${esc(m.tg)}">@${esc(m.tg)}</a>` : '';
       return `<div class="item-row"><span>${label}</span>${tgLink}</div>`;
     });
-    document.getElementById('matesContainer').innerHTML = rows.join('') || '<div style="color:var(--muted)">Topilmadi</div>';
+    document.getElementById('matesContainer').innerHTML = rows.join('') || '<div style="color:var(--muted)">Tabılmadı</div>';
   }
 
   async function doTranslate() {
@@ -338,21 +338,21 @@
     const [src, dest] = document.getElementById('trPair').value.split('|');
     const btn = document.getElementById('trBtn');
     const out = document.getElementById('trOutput');
-    btn.textContent = 'Tarjima qilinmoqda...';
+    btn.textContent = 'Awdarma qılınbaqta...';
     try {
       const r = await fetch(`/api/translate?src=${src}&dest=${dest}&q=${encodeURIComponent(text)}`);
       const d = await r.json();
-      out.textContent = d.result || d.error || 'Xatolik';
+      out.textContent = d.result || d.error || 'Qátelik';
     } catch (e) {
-      out.textContent = 'Xatolik yuz berdi.';
+      out.textContent = 'Qátelik júz berdi.';
     }
-    btn.textContent = 'Tarjima qilish';
+    btn.textContent = 'Awdarma qılıw';
   }
 
   async function load() {
     const r = await fetch('/api/data');
     APP = await r.json();
-    document.getElementById('groupName').textContent = `🎓 ${APP.group} • Rasmiy Mini Ilova`;
+    document.getElementById('groupName').textContent = `🎓 ${APP.group} • Rásmiy Mini Qollanba`;
     document.getElementById('stSubjects').textContent = APP.subjects.length;
     document.getElementById('stMates').textContent = APP.mates.filter(m => !m.role).length;
     document.getElementById('stExams').textContent = APP.exams.length;
@@ -362,7 +362,7 @@
     const tItems = (APP.schedule[String(selectedDay)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
     document.getElementById('todayList').innerHTML = tItems.length
       ? tItems.map(fmtLessonRow).join('')
-      : '<div style="color:var(--muted);font-size:14px;">Bugun dars yo‘q yoki dam olish kuni!</div>';
+      : '<div style="color:var(--muted);font-size:14px;">Búgin sabaq joq yaki dem alıs kúni!</div>';
 
     // E'lonlar
     const anns = (APP.announcements || []).slice(-5).reverse();
@@ -382,10 +382,10 @@
     // Mas'ullar
     const L = APP.leaders;
     document.getElementById('leadersCard').innerHTML = `
-      <h3><span>ℹ️ Guruh mas'ullari</span></h3>
+      <h3><span>ℹ️ Gruppa juwapkerleri</span></h3>
       <div class="item-row"><span>👩‍🏫 Kurator: <b>${esc(L.curator.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.curator.tg)}">@${esc(L.curator.tg)}</a></div>
       <div class="item-row"><span>⭐ Starosta: <b>${esc(L.starosta.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.starosta.tg)}">@${esc(L.starosta.tg)}</a></div>
-      <div class="item-row"><span>💻 Yaratuvchi: <b>${esc(L.creator.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.creator.tg)}">@${esc(L.creator.tg)}</a></div>
+      <div class="item-row"><span>💻 Jaratıwshı: <b>${esc(L.creator.name)}</b></span><a class="contact-link" href="https://t.me/${esc(L.creator.tg)}">@${esc(L.creator.tg)}</a></div>
     `;
 
     // Kunlar
@@ -399,21 +399,21 @@
       const isPhys = s.name.toLowerCase().includes('fizika');
       const isSingle = !!s.single;
       const secIcon = isPhys ? '🧪' : '📝';
-      const secShort = isPhys ? 'lab' : 'amaliy';
+      const secShort = isPhys ? 'lab' : 'ámeliy';
       const fmtItem = (it, k, ji, ic) => {
         const body = it.type === 'text'
           ? `<small>${esc(it.content)}</small>`
-          : `<small><a class="contact-link" href="/api/file?s=${si}&k=${k}&j=${ji}" target="_blank">📄 Ochish / Yuklab olish ↗</a></small>`;
+          : `<small><a class="contact-link" href="/api/file?s=${si}&k=${k}&j=${ji}" target="_blank">📄 Ashıw / Júklep alıw ↗</a></small>`;
         return `<div class="sub-item">${ic} <b>${esc(it.title)}</b>${body}</div>`;
       };
       const lecs = (s.lectures || []).map((it, ji) => fmtItem(it, 'l', ji, '📖')).join('');
       const labs = (s.labs || []).map((it, ji) => fmtItem(it, 'b', ji, secIcon)).join('');
       const badgeText = isSingle
-        ? `${(s.lectures||[]).length} ta material`
-        : `${(s.lectures||[]).length} ma'ruza • ${(s.labs||[]).length} ${secShort}`;
+        ? `${(s.lectures||[]).length} material`
+        : `${(s.lectures||[]).length} lekciya • ${(s.labs||[]).length} ${secShort}`;
       return `<div class="card">
         <h3><span>${esc(s.name)}</span><span class="badge">${badgeText}</span></h3>
-        <div class="sub-list">${lecs || labs ? lecs + labs : '<small style="color:var(--muted)">Materiallar tez orada qo‘shiladi</small>'}</div>
+        <div class="sub-list">${lecs || labs ? lecs + labs : '<small style="color:var(--muted)">Materiallar tez arada qosıladı</small>'}</div>
       </div>`;
     }).join('');
 

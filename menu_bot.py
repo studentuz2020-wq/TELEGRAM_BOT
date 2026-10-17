@@ -28,6 +28,7 @@ LOCK = threading.RLock()
 REMIND_BEFORE_MIN = 15
 
 DAYS = ["Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba", "Yakshanba"]
+DAYS_QQ = ["Dúyshembi", "Siyshembi", "Sárshembi", "Piyshembi", "Juma", "Shembi", "Ekshembi"]
 
 # ---------- Doimiy ma'lumotlar ----------
 CURATOR = {"name": "Avezova Ziyada", "phone": "+998 91 395 08 76", "tg": "Avezova_Ziyada"}
@@ -224,6 +225,7 @@ def default_data():
         "announcements": [],
         "exams": [],
         "mates": default_mates(),
+        "groups": {},
     }
 
 
@@ -269,6 +271,7 @@ def _upgrade_data(data):
     sch0 = (data.get("schedule") or {}).get("0") or []
     if len(sch0) == 2 and sch0[0].get("name") == "Fizika" and not sch0[0].get("teacher"):
         data["schedule"] = d["schedule"]
+    data.setdefault("groups", {})
     return data
 
 
@@ -347,13 +350,33 @@ def register_user(user):
         return u
 
 
+def register_group(chat):
+    if chat.type not in ("group", "supergroup"):
+        return
+    with LOCK:
+        gid = str(chat.id)
+        groups = DATA.setdefault("groups", {})
+        title = chat.title or "Guruh"
+        g = groups.get(gid)
+        if not g:
+            groups[gid] = {
+                "title": title,
+                "added": datetime.now(TZ).strftime("%Y-%m-%d"),
+                "remind": True,
+            }
+            save()
+        elif g.get("title") != title:
+            g["title"] = title
+            save()
+
+
 user_direction = {}  # chat_id -> (src, dest)
 
 DIRECTIONS = {
-    "tr_uz_en": ("uz", "en", "🇺🇿 O'zbekcha → 🇬🇧 Inglizcha"),
-    "tr_en_uz": ("en", "uz", "🇬🇧 Inglizcha → 🇺🇿 O'zbekcha"),
-    "tr_ru_uz": ("ru", "uz", "🇷🇺 Ruscha → 🇺🇿 O'zbekcha"),
-    "tr_uz_ru": ("uz", "ru", "🇺🇿 O'zbekcha → 🇷🇺 Ruscha"),
+    "tr_uz_en": ("uz", "en", "🇺🇿 Qaraqalpaqsha / Ózbekshe → 🇬🇧 Inglisshe"),
+    "tr_en_uz": ("en", "uz", "🇬🇧 Inglisshe → 🇺🇿 Qaraqalpaqsha / Ózbekshe"),
+    "tr_ru_uz": ("ru", "uz", "🇷🇺 Orıssha → 🇺🇿 Qaraqalpaqsha / Ózbekshe"),
+    "tr_uz_ru": ("uz", "ru", "🇺🇿 Qaraqalpaqsha / Ózbekshe → 🇷🇺 Orıssha"),
 }
 
 
@@ -381,25 +404,25 @@ WEBAPP_URL = (os.getenv("WEBAPP_URL") or os.getenv("RENDER_EXTERNAL_URL") or "")
 WEBAPP_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "webapp", "index.html")
 
 
-def main_menu(uid=None):
+def main_menu(uid=None, chat_type="private"):
     m = types.InlineKeyboardMarkup(row_width=2)
-    if WEBAPP_URL.startswith("https://"):
+    if chat_type == "private" and WEBAPP_URL.startswith("https://"):
         m.add(
             types.InlineKeyboardButton(
-                "📱 Mini Ilovani ochish", web_app=types.WebAppInfo(url=f"{WEBAPP_URL}/app")
+                "📱 Mini Qollanbanı ashıw", web_app=types.WebAppInfo(url=f"{WEBAPP_URL}/app")
             )
         )
     b = [
-        btn("📚 Fanlar", "menu_subjects"),
-        btn("📅 Jadval", "menu_schedule"),
-        btn("🌐 Tarjimon", "menu_translation"),
-        btn("📝 Imtihonlar", "menu_exams"),
-        btn("📢 E'lonlar", "menu_ann"),
-        btn("👥 Guruhdoshlar", "menu_mates"),
+        btn("📚 Pánler (Sabaqlar)", "menu_subjects"),
+        btn("📅 Sabaq kestesi", "menu_schedule"),
+        btn("🌐 Awdarmashı", "menu_translation"),
+        btn("📝 Imtixanlar", "menu_exams"),
+        btn("📢 Daǵazalar", "menu_ann"),
+        btn("👥 Gruppalaslar", "menu_mates"),
         btn("👤 Profilim", "menu_profile"),
-        btn("ℹ️ Ma'lumot", "menu_info"),
+        btn("ℹ️ Maǵlıwmat", "menu_info"),
     ]
-    if uid is not None and is_admin(uid):
+    if chat_type == "private" and uid is not None and is_admin(uid):
         b.append(btn("🛠 Admin panel", "adm"))
     m.add(*b)
     return m
@@ -416,73 +439,144 @@ def show(call, text, markup=None):
 
 
 def creator_footer():
-    return "\n\n💻 Yaratuvchi: <b>{}</b> (@{})".format(CREATOR["name"], CREATOR["tg"])
+    return "\n\n💻 Jaratıwshı: <b>{}</b> (@{})".format(CREATOR["name"], CREATOR["tg"])
 
 
 def info_text():
     return (
         header("ℹ️", BOT_NAME)
-        + "Kursdoshlar uchun o'quv materiallari, dars jadvali va foydali ma'lumotlar boti.\n\n"
-        f"🎓 Guruh: <b>{html.escape(DATA['group'])}</b>\n\n"
+        + "Kurslaslar ushın oqıw materialları, sabaq kestesi hám paydalı maǵlıwmatlar botı.\n\n"
+        f"🎓 Gruppa: <b>{html.escape(DATA['group'])}</b>\n\n"
         + person("👩‍🏫 <b>Kurator</b>", CURATOR) + "\n\n"
         + person("⭐ <b>Starosta</b>", STAROSTA) + "\n\n"
-        + person("💻 <b>Bot yaratuvchisi</b>", CREATOR)
+        + person("💻 <b>Bot jaratıwshısı</b>", CREATOR)
     )
+
+
+def group_welcome_text():
+    return (
+        f"🎓 <b>Assalawma aleykum, {html.escape(DATA['group'])} gruppası!</b> 👋\n"
+        f"Men gruppanıń rásmiy yordamshı botıman (<b>{BOT_NAME}</b>).\n\n"
+        "📌 <b>Gruppada ne qıla alaman?</b>\n"
+        "• ☀️ Hár kúni azanda <b>07:30</b> da búgingi sabaq kestesin jiberemen\n"
+        "• ⏰ Hár para baslanıwınan <b>15 minut aldın</b> esletemen\n"
+        "• 📅 <i>«búgin ne sabaq?»</i>, <i>«erteń ne sabaq?»</i>, <i>«keste»</i> deseńiz — sabaq kestesin shıǵaraman\n"
+        "• 📚 <i>«fizika pdf»</i>, <i>«matematika»</i>, <i>«geodeziya»</i>, <i>«tariyx»</i>, "
+        "<i>«qaraqalpaq tili»</i>, <i>«ingliz tili»</i>, <i>«rus tili»</i> deseńiz — lekciya hám ámeliy PDF fayllardı beremen\n"
+        "• 👩‍🏫 <i>«kurator nomeri»</i>, <i>«starosta nomeri»</i>, <i>«gruppa dizimi»</i> deseńiz — maǵlıwmat shıǵaraman\n"
+        "• 🌐 Xabarǵa <i>Reply</i> qılıp <code>/tr</code> jazsańız — awdarma (tarjima) qılaman!"
+        + creator_footer()
+    )
+
+
+@bot.message_handler(content_types=["new_chat_members"])
+def on_new_chat_members(message):
+    register_group(message.chat)
+    try:
+        me = bot.get_me()
+        for member in message.new_chat_members or []:
+            if member.id == me.id:
+                bot.send_message(
+                    message.chat.id,
+                    group_welcome_text(),
+                    reply_markup=main_menu(message.from_user.id, message.chat.type),
+                )
+                break
+    except Exception:
+        pass
 
 
 # ---------- /start, /help, /myid ----------
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
+    register_group(message.chat)
     u = register_user(message.from_user)
     user_direction.pop(message.chat.id, None)
     if u.get("tr"):
         u.pop("tr", None)
         save()
+    if message.chat.type in ("group", "supergroup"):
+        bot.send_message(
+            message.chat.id,
+            group_welcome_text(),
+            reply_markup=main_menu(message.from_user.id, message.chat.type),
+        )
+        return
     if os.path.exists(BANNER):
         try:
             with open(BANNER, "rb") as f:
                 bot.send_photo(
                     message.chat.id, f,
-                    caption=f"🎓 <b>{BOT_NAME}</b>\n{html.escape(DATA['group'])} guruhi uchun",
+                    caption=f"🎓 <b>{BOT_NAME}</b>\n{html.escape(DATA['group'])} gruppası ushın",
                 )
         except Exception:
             pass
     bot.send_message(
         message.chat.id,
-        f"Assalomu alaykum, <b>{html.escape(message.from_user.first_name or 'do‘st')}</b>! 👋\n"
-        f"<b>{BOT_NAME}</b> — <b>{html.escape(DATA['group'])}</b> guruhining shaxsiy yordamchisi."
+        f"Assalawma aleykum, <b>{html.escape(message.from_user.first_name or 'dos')}</b>! 👋\n"
+        f"<b>{BOT_NAME}</b> — <b>{html.escape(DATA['group'])}</b> gruppasınıń jeke yordamshı botı."
         + creator_footer()
-        + f"\n{LINE}\nKerakli bo'limni tanlang 👇",
-        reply_markup=main_menu(message.from_user.id),
+        + f"\n{LINE}\nKerekli bólimdi tańlań 👇",
+        reply_markup=main_menu(message.from_user.id, message.chat.type),
     )
 
 
 @bot.message_handler(commands=["help"])
 def help_cmd(message):
+    register_group(message.chat)
     bot.send_message(
         message.chat.id,
-        "/start - bosh menyu\n/today - bugungi darslar\n/week - haftalik jadval\n"
-        "/profile - profilim\n/myid - Telegram ID\n/admin - admin panel",
+        "/start - bas menyu\n"
+        "/bugin (/today) - búgingi sabaqlar\n"
+        "/erten (/ertaga) - erteńgi sabaqlar\n"
+        "/keste (/week) - háptelik sabaq kestesi\n"
+        "/fanlar (/sabaqlar) - PDF hám lekciyalar\n"
+        "/tr - awdarma (tarjima)\n"
+        "/profile - profilim\n"
+        "/myid - Telegram ID",
     )
 
 
 @bot.message_handler(commands=["myid"])
 def myid(message):
-    bot.reply_to(message, f"Sizning ID: <code>{message.from_user.id}</code>")
+    register_group(message.chat)
+    bot.reply_to(message, f"Siziń ID: <code>{message.from_user.id}</code>")
 
 
-@bot.message_handler(commands=["today"])
+@bot.message_handler(commands=["today", "bugin"])
 def today_cmd(message):
+    register_group(message.chat)
     bot.send_message(message.chat.id, today_text())
 
 
-@bot.message_handler(commands=["week"])
+@bot.message_handler(commands=["ertaga", "erten"])
+def tomorrow_cmd(message):
+    register_group(message.chat)
+    bot.send_message(message.chat.id, tomorrow_text())
+
+
+@bot.message_handler(commands=["week", "hapte", "keste"])
 def week_cmd(message):
+    register_group(message.chat)
     bot.send_message(message.chat.id, week_text())
+
+
+@bot.message_handler(commands=["fanlar", "sabaqlar", "pdf"])
+def subjects_cmd(message):
+    register_group(message.chat)
+    bot.send_message(
+        message.chat.id,
+        header("📚", "Pánler / Sabaqlar") + "Pándi tańlań (PDF hám lekciyalar):",
+        reply_markup=kb(
+            *[btn(s["name"], f"s:{i}") for i, s in enumerate(DATA["subjects"])],
+            btn("🏠 Bas menyu", "back_to_main"),
+        ),
+    )
 
 
 @bot.message_handler(commands=["profile"])
 def profile_cmd(message):
+    register_group(message.chat)
     register_user(message.from_user)
     t, m = profile_view(message.from_user.id)
     bot.send_message(message.chat.id, t, reply_markup=m)
@@ -490,8 +584,9 @@ def profile_cmd(message):
 
 @bot.message_handler(commands=["admin"])
 def admin_cmd(message):
+    register_group(message.chat)
     if not is_admin(message.from_user.id):
-        bot.reply_to(message, "⛔ Siz admin emassiz.")
+        bot.reply_to(message, "⛔ Siz admin emessiz.")
         return
     bot.send_message(message.chat.id, "🛠 Admin panel:", reply_markup=admin_menu())
 
@@ -514,20 +609,33 @@ def fmt_lesson(x):
 def fmt_day(i):
     items = sorted(DATA["schedule"].get(str(i), []), key=lambda x: x["time"])
     if not items:
-        return "— dars yo'q"
+        return "— sabaq joq"
     return "\n".join(fmt_lesson(x) for x in items)
 
 
 def week_text():
-    days = [f"<b>{DAYS[i]}</b>\n{fmt_day(i)}" for i in range(7) if DATA["schedule"].get(str(i))]
+    days = [
+        f"<b>{DAYS_QQ[i]}</b>\n{fmt_day(i)}"
+        for i in range(7)
+        if DATA["schedule"].get(str(i))
+    ]
     if not days:
-        return header("📅", "Haftalik dars jadvali") + "Jadval hali kiritilmagan."
-    return header("📅", "Haftalik dars jadvali") + "\n\n".join(days)
+        return header("📅", "Háptelik sabaq kestesi") + "Keste ele kiritilmegen."
+    return header("📅", "Háptelik sabaq kestesi") + "\n\n".join(days)
+
+
+def day_schedule_text(i, prefix="📅"):
+    return header(prefix, f"{DAYS_QQ[i]} — Sabaq kestesi") + fmt_day(i)
 
 
 def today_text():
     i = datetime.now(TZ).weekday()
-    return header("🕒", f"Bugungi darslar — {DAYS[i]}") + fmt_day(i)
+    return header("🕒", f"Búgingi sabaqlar — {DAYS_QQ[i]}") + fmt_day(i)
+
+
+def tomorrow_text():
+    i = (datetime.now(TZ).weekday() + 1) % 7
+    return header("📅", f"Erteńgi sabaqlar — {DAYS_QQ[i]}") + fmt_day(i)
 
 
 # ---------- Profil ----------
@@ -535,16 +643,16 @@ def profile_view(uid):
     u = DATA["users"].get(str(uid), {})
     text = (
         header("👤", "Profilim")
-        + f"🙍 Ism: {html.escape(u.get('name', '-'))}\n"
+        + f"🙍 Atı-jóni: {html.escape(u.get('name', '-'))}\n"
         f"🔗 Username: @{u.get('username') or '-'}\n"
         f"🆔 ID: <code>{uid}</code>\n"
-        f"📆 Qo'shilgan sana: {u.get('joined', '-')}\n"
-        f"🌐 Tarjimalar soni: {u.get('translations', 0)}\n"
-        f"⏰ Dars eslatmasi: {'🔔 yoqilgan' if u.get('remind', True) else '🔕 o‘chirilgan'}"
+        f"📆 Qosılǵan sáne: {u.get('joined', '-')}\n"
+        f"🌐 Awdarmalar sanı: {u.get('translations', 0)}\n"
+        f"⏰ Sabaq esletpesi: {'🔔 qosılǵan' if u.get('remind', True) else '🔕 óshirilgen'}"
     )
     m = kb(
-        btn("🔕 Eslatmani o'chirish" if u.get("remind", True) else "🔔 Eslatmani yoqish", "toggle_remind"),
-        btn("⬅️ Orqaga", "back_to_main"),
+        btn("🔕 Esletpeni óshiriw" if u.get("remind", True) else "🔔 Esletpeni qosıw", "toggle_remind"),
+        btn("⬅️ Artqa", "back_to_main"),
     )
     return text, m
 
@@ -552,7 +660,7 @@ def profile_view(uid):
 def second_section(subj_name):
     if "fizika" in subj_name.lower():
         return "🧪", "Laboratoriya"
-    return "📝", "Amaliy mashg'ulotlar"
+    return "📝", "Ámeliy shınıǵıwlar"
 
 
 # ---------- Admin ----------
@@ -660,11 +768,22 @@ def step_ann(message):
     sent = 0
     for uid in list(DATA["users"]):
         try:
-            bot.send_message(int(uid), f"📢 <b>E'lon</b>\n\n{text}")
+            bot.send_message(int(uid), f"📢 <b>E'lon / Daǵaza</b>\n\n{text}")
             sent += 1
         except Exception:
             pass
-    bot.send_message(message.chat.id, f"✅ {sent} ta foydalanuvchiga yuborildi.", reply_markup=admin_menu())
+    gsent = 0
+    for gid in list(DATA.get("groups", {})):
+        try:
+            bot.send_message(int(gid), f"📢 <b>Gruppa ushın daǵaza (E'lon):</b>\n{LINE}\n{text}")
+            gsent += 1
+        except Exception:
+            pass
+    bot.send_message(
+        message.chat.id,
+        f"✅ {sent} ta foydalanuvchi va {gsent} ta guruhga yuborildi.",
+        reply_markup=admin_menu(),
+    )
 
 
 def step_exam(message):
@@ -743,15 +862,23 @@ def handle_admin(call):
         bot.send_message(chat_id, "✅ Ma'lumotlar bazadan yangilandi.", reply_markup=admin_menu())
     elif data == "adm_stats":
         users = DATA["users"].values()
+        groups = DATA.get("groups", {})
         tr = sum(u.get("translations", 0) for u in users)
-        bot.send_message(chat_id, f"📊 Foydalanuvchilar: {len(users)}\nTarjimalar: {tr}")
+        bot.send_message(
+            chat_id,
+            f"📊 Foydalanuvchilar: {len(users)}\n"
+            f"👥 Ulangan guruhlar: {len(groups)}\n"
+            f"🌐 Tarjimalar: {tr}",
+        )
 
 
 # ---------- Tugmalar ----------
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     bot.answer_callback_query(call.id)
+    register_group(call.message.chat)
     chat_id = call.message.chat.id
+    chat_type = call.message.chat.type
     uid = call.from_user.id
     data = call.data
 
@@ -767,13 +894,13 @@ def callback_handler(call):
         if u.get("tr"):
             u.pop("tr", None)
             save()
-        show(call, header("🏠", "Asosiy menyu") + f"🎓 {html.escape(DATA['group'])}\nBo'limni tanlang 👇",
-             main_menu(uid))
+        show(call, header("🏠", "Bas menyu") + f"🎓 {html.escape(DATA['group'])}\nBólimdi tańlań 👇",
+             main_menu(uid, chat_type))
 
     elif data == "menu_translation":
         user_direction.pop(chat_id, None)
-        show(call, header("🌐", "Tarjimon") + "Tarjima yo'nalishini tanlang:", kb(
-            *[btn(v[2], k) for k, v in DIRECTIONS.items()], btn("⬅️ Orqaga", "back_to_main")))
+        show(call, header("🌐", "Awdarmashı") + "Awdarma baǵdarın tańlań:", kb(
+            *[btn(v[2], k) for k, v in DIRECTIONS.items()], btn("⬅️ Artqa", "back_to_main")))
 
     elif data in DIRECTIONS:
         src, dest, label = DIRECTIONS[data]
@@ -781,40 +908,40 @@ def callback_handler(call):
         u = register_user(call.from_user)
         u["tr"] = [src, dest]
         save()
-        show(call, header("🌐", "Tarjimon") + f"✅ Yo'nalish: <b>{label}</b>\n\n"
-             "✍️ Endi tarjima qilinadigan matnni yuboring.",
-             kb(btn("⬅️ Orqaga", "menu_translation")))
+        show(call, header("🌐", "Awdarmashı") + f"✅ Baǵdar: <b>{label}</b>\n\n"
+             "✍️ Endi awdarma qılınatuǵın tekstti jiberiń.",
+             kb(btn("⬅️ Artqa", "menu_translation")))
 
     elif data == "menu_subjects":
-        show(call, header("📚", "Fanlar") + "Fanni tanlang:", kb(
+        show(call, header("📚", "Pánler (Sabaqlar)") + "Pándi tańlań:", kb(
             *[btn(s["name"], f"s:{i}") for i, s in enumerate(DATA["subjects"])],
-            btn("⬅️ Orqaga", "back_to_main")))
+            btn("⬅️ Artqa", "back_to_main")))
 
     elif data.startswith("s:"):
         i = int(data[2:])
         s = DATA["subjects"][i]
         if s.get("single"):
             items = s.get("lectures") or []
-            body = "Materialni tanlang (ustiga bossangiz fayl ochiladi):" if items else "Hali qo'shilmagan."
+            body = "Materialdı tańlań (ústine bassańız fayl ashıladı):" if items else "Ele qosılmaǵan."
             show(call, header("📚", html.escape(s["name"])) + body, kb(
                 *[btn(it["title"], f"it:{i}:l:{j}") for j, it in enumerate(items)],
-                btn("⬅️ Fanlarga qaytish", "menu_subjects")))
+                btn("⬅️ Pánlerge qaytıw", "menu_subjects")))
         else:
             sec_icon, sec_name = second_section(s["name"])
-            show(call, header("📚", html.escape(s["name"])) + "Bo'limni tanlang:", kb(
-                btn(f"📖 Ma'ruzalar ({len(s['lectures'])})", f"sl:{i}"),
+            show(call, header("📚", html.escape(s["name"])) + "Bólimdi tańlań:", kb(
+                btn(f"📖 Lekciyalar ({len(s['lectures'])})", f"sl:{i}"),
                 btn(f"{sec_icon} {sec_name} ({len(s['labs'])})", f"sb:{i}"),
-                btn("⬅️ Fanlarga qaytish", "menu_subjects")))
+                btn("⬅️ Pánlerge qaytıw", "menu_subjects")))
 
     elif data.startswith(("sl:", "sb:")):
         i = int(data[3:])
         kind = "lectures" if data.startswith("sl:") else "labs"
         s = DATA["subjects"][i]
-        icon, name = ("📖", "Ma'ruzalar") if kind == "lectures" else second_section(s["name"])
-        body = "Mavzuni tanlang (ustiga bossangiz fayl yuboriladi):" if s[kind] else "Hali qo'shilmagan."
+        icon, name = ("📖", "Lekciyalar") if kind == "lectures" else second_section(s["name"])
+        body = "Temanı tańlań (ústine bassańız fayl jiberiledi):" if s[kind] else "Ele qosılmaǵan."
         show(call, header(icon, f"{html.escape(s['name'])} — {name}") + body, kb(
             *[btn(it["title"], f"it:{i}:{kind[0]}:{j}") for j, it in enumerate(s[kind])],
-            btn("⬅️ Orqaga", f"s:{i}")))
+            btn("⬅️ Artqa", f"s:{i}")))
 
     elif data.startswith("it:"):
         _, i, k, j = data.split(":")
@@ -828,20 +955,24 @@ def callback_handler(call):
             bot.send_photo(chat_id, item["content"], caption=cap)
 
     elif data == "menu_schedule":
-        show(call, header("📅", "Dars jadvali") + "Tanlang:", kb(
-            btn("📅 Haftalik", "sch_week"), btn("🕒 Bugun", "sch_today"),
-            btn("⬅️ Orqaga", "back_to_main"), width=2))
+        show(call, header("📅", "Sabaq kestesi") + "Tańlań:", kb(
+            btn("📅 Háptelik", "sch_week"), btn("🕒 Búgin", "sch_today"),
+            btn("📆 Erteń", "sch_tomorrow"),
+            btn("⬅️ Artqa", "back_to_main"), width=2))
 
     elif data == "sch_week":
-        show(call, week_text(), kb(btn("⬅️ Orqaga", "menu_schedule")))
+        show(call, week_text(), kb(btn("⬅️ Artqa", "menu_schedule")))
 
     elif data == "sch_today":
-        show(call, today_text(), kb(btn("⬅️ Orqaga", "menu_schedule")))
+        show(call, today_text(), kb(btn("⬅️ Artqa", "menu_schedule")))
+
+    elif data == "sch_tomorrow":
+        show(call, tomorrow_text(), kb(btn("⬅️ Artqa", "menu_schedule")))
 
     elif data == "menu_ann":
         anns = DATA["announcements"][-5:][::-1]
-        body = "\n\n".join(f"🗓 <i>{a['date']}</i>\n{a['text']}" for a in anns) if anns else "E'lonlar yo'q."
-        show(call, header("📢", "So'nggi e'lonlar") + body, kb(btn("⬅️ Orqaga", "back_to_main")))
+        body = "\n\n".join(f"🗓 <i>{a['date']}</i>\n{a['text']}" for a in anns) if anns else "Daǵazalar joq."
+        show(call, header("📢", "Sońǵı daǵazalar") + body, kb(btn("⬅️ Artqa", "back_to_main")))
 
     elif data == "menu_exams":
         today = datetime.now(TZ).date()
@@ -850,9 +981,9 @@ def callback_handler(call):
             d = datetime.strptime(e["date"], "%Y-%m-%d").date()
             left = (d - today).days
             if left >= 0:
-                lines.append(f"📝 <b>{html.escape(e['name'])}</b>\n     🗓 {e['date']} — ⏳ {left} kun qoldi")
-        body = "\n\n".join(lines) if lines else "Rejalashtirilgan imtihon yo'q."
-        show(call, header("📝", "Imtihonlar") + body, kb(btn("⬅️ Orqaga", "back_to_main")))
+                lines.append(f"📝 <b>{html.escape(e['name'])}</b>\n     🗓 {e['date']} — ⏳ {left} kún qaldı")
+        body = "\n\n".join(lines) if lines else "Rejelestirilgen imtixan joq."
+        show(call, header("📝", "Imtixanlar") + body, kb(btn("⬅️ Artqa", "back_to_main")))
 
     elif data == "menu_mates":
         lines = []
@@ -868,8 +999,8 @@ def callback_handler(call):
             if m.get("phone"):
                 line += f" — {m['phone']}"
             lines.append(line)
-        show(call, header("👥", f"Guruhdoshlar — {html.escape(DATA['group'])}") + "\n".join(lines),
-             kb(btn("⬅️ Orqaga", "back_to_main")))
+        show(call, header("👥", f"Gruppalaslar — {html.escape(DATA['group'])}") + "\n".join(lines),
+             kb(btn("⬅️ Artqa", "back_to_main")))
 
     elif data == "menu_profile":
         register_user(call.from_user)
@@ -884,10 +1015,77 @@ def callback_handler(call):
         show(call, t, m)
 
     elif data == "menu_info":
-        show(call, info_text(), kb(btn("⬅️ Orqaga", "back_to_main")))
+        show(call, info_text(), kb(btn("⬅️ Artqa", "back_to_main")))
 
 
-# ---------- Tarjima ----------
+# ---------- Qoraqalpoq & O'zbek tili tahlilchisi va Tarjimon ----------
+_CYR_TO_LAT = {
+    "а": "a", "ә": "a", "б": "b", "в": "v", "г": "g", "ғ": "g", "д": "d",
+    "е": "e", "ё": "yo", "ж": "j", "з": "z", "и": "i", "й": "y", "к": "k",
+    "қ": "q", "л": "l", "м": "m", "н": "n", "ң": "n", "о": "o", "ө": "o",
+    "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ў": "u", "ү": "u",
+    "ф": "f", "х": "x", "ҳ": "h", "ц": "c", "ч": "ch", "ш": "sh", "щ": "sh",
+    "ъ": "", "ы": "i", "ь": "", "э": "e", "ю": "yu", "я": "ya",
+    "á": "a", "ó": "o", "ú": "u", "ǵ": "g", "ń": "n", "ı": "i",
+}
+
+
+def norm_qq(text):
+    """Qoraqalpoq (lotin/kirill), O'zbek va Rus matnini yagona lotin qidiruv shakliga keltiradi."""
+    s = (text or "").lower()
+    out = []
+    for ch in s:
+        if ch in _CYR_TO_LAT:
+            out.append(_CYR_TO_LAT[ch])
+        elif ch.isalnum() or ch.isspace():
+            out.append(ch)
+        else:
+            out.append(" ")
+    return " ".join("".join(out).split())
+
+
+_QQ_TO_UZ_WORDS = {
+    "assalawma": "assalomu", "aleykum": "alaykum", "qayirli": "xayrli",
+    "bugin": "bugun", "búgin": "bugun", "bugingi": "bugungi", "búgingi": "bugungi",
+    "erten": "ertaga", "erteń": "ertaga", "erteng": "ertaga", "ertengi": "ertangi",
+    "sabaq": "dars", "sabaqlar": "darslar", "sabaqlari": "darslari", "sabaqları": "darslari",
+    "keste": "jadval", "kestesi": "jadvali", "saat": "soat", "neshede": "nechada",
+    "neshe": "nechta", "nechenshi": "nechanchi", "baslanadi": "boshlanadi",
+    "baslanadı": "boshlanadi", "qashan": "qachon", "qaysi": "qaysi", "qaysı": "qaysi",
+    "qanday": "qanday", "qalay": "qalay", "jaqsi": "yaxshi", "jaqsı": "yaxshi",
+    "barma": "bormi", "joq": "yo'q", "awa": "ha", "xana": "xona", "xanada": "xonada",
+    "mugallim": "o'qituvchi", "muǵallim": "o'qituvchi", "oqitiwshi": "o'qituvchi",
+    "ameliy": "amaliy", "ámeliy": "amaliy", "lekciya": "ma'ruza", "kitap": "kitob",
+    "ushin": "uchun", "ushın": "uchun", "haqqinda": "haqida", "haqqında": "haqida",
+    "boyinsha": "bo'yicha", "boyınsha": "bo'yicha", "kerek": "kerak",
+    "jiber": "yubor", "tasla": "tashla", "awdar": "tarjima qil",
+    "duyshembi": "dushanba", "dúyshembi": "dushanba", "siyshembi": "seshanba",
+    "sarshembi": "chorshanba", "sárshembi": "chorshanba", "piyshembi": "payshanba",
+    "shembi": "shanba", "ekshembi": "yakshanba", "hapte": "hafta", "hápte": "hafta",
+}
+
+
+def _prepare_source_text(text, sl):
+    """Agar matnda qoraqalpoqcha so'zlar bo'lsa va manba uz/auto bo'lsa, tarjima aniqligini oshiradi."""
+    if sl not in ("uz", "auto"):
+        return text
+    words = text.split()
+    converted = []
+    changed = 0
+    for w in words:
+        clean = w.strip(".,!?;:()\"'«»").lower()
+        norm_w = norm_qq(clean)
+        rep = _QQ_TO_UZ_WORDS.get(clean) or _QQ_TO_UZ_WORDS.get(norm_w)
+        if rep:
+            converted.append(rep)
+            changed += 1
+        else:
+            converted.append(w)
+    if changed > 0:
+        return " ".join(converted)
+    return text
+
+
 def do_translate(text, src="auto", dest="uz"):
     import requests
 
@@ -895,11 +1093,13 @@ def do_translate(text, src="auto", dest="uz"):
     if not text:
         return ""
     sl = src or "auto"
+    query_text = _prepare_source_text(text, sl)
+    eff_sl = "uz" if (sl == "auto" and query_text != text) else sl
     # 1-usul: Google Translate GTX JSON API (eng tez va barqaror)
     try:
         r = requests.get(
             "https://translate.googleapis.com/translate_a/single",
-            params={"client": "gtx", "sl": sl, "tl": dest, "dt": "t", "q": text},
+            params={"client": "gtx", "sl": eff_sl, "tl": dest, "dt": "t", "q": query_text},
             headers={"User-Agent": "Mozilla/5.0"},
             timeout=12,
         )
@@ -914,7 +1114,7 @@ def do_translate(text, src="auto", dest="uz"):
     try:
         r = requests.get(
             "https://clients5.google.com/translate_a/t",
-            params={"client": "dict-chrome-ex", "sl": sl, "tl": dest, "q": text},
+            params={"client": "dict-chrome-ex", "sl": eff_sl, "tl": dest, "q": query_text},
             headers={"User-Agent": "Mozilla/5.0"},
             timeout=12,
         )
@@ -929,60 +1129,312 @@ def do_translate(text, src="auto", dest="uz"):
         pass
     # 3-usul: MyMemory API
     try:
-        pair_src = "uz" if sl == "auto" else sl
+        pair_src = "uz" if eff_sl == "auto" else eff_sl
         r = requests.get(
             "https://api.mymemory.translated.net/get",
-            params={"q": text[:480], "langpair": f"{pair_src}|{dest}"},
+            params={"q": query_text[:480], "langpair": f"{pair_src}|{dest}"},
             timeout=12,
         )
         r.raise_for_status()
         out = (r.json().get("responseData") or {}).get("translatedText")
-        if out:
+        if out and "INVALID" not in out.upper():
             return out
     except Exception:
         pass
     # 4-usul: deep_translator zaxira
-    return GoogleTranslator(source=sl, target=dest).translate(text)
+    return GoogleTranslator(source=eff_sl, target=dest).translate(query_text)
 
 
 def detect_and_translate(text):
     import requests
 
+    prep = _prepare_source_text(text, "auto")
+    is_qq_or_uz = prep != text
     try:
         r = requests.get(
             "https://translate.googleapis.com/translate_a/single",
-            params={"client": "gtx", "sl": "auto", "tl": "uz", "dt": "t", "q": text},
+            params={
+                "client": "gtx",
+                "sl": "uz" if is_qq_or_uz else "auto",
+                "tl": "uz",
+                "dt": "t",
+                "q": prep,
+            },
             headers={"User-Agent": "Mozilla/5.0"},
             timeout=12,
         )
         r.raise_for_status()
         data = r.json()
-        detected = data[2] if len(data) > 2 else "uz"
+        detected = "uz" if is_qq_or_uz else (data[2] if len(data) > 2 else "uz")
         uz_text = "".join(seg[0] for seg in data[0] if seg and seg[0])
-        if detected == "uz":
-            en_text = do_translate(text, "uz", "en")
-            ru_text = do_translate(text, "uz", "ru")
+        if detected in ("uz", "kk", "ky", "tk", "tr", "kaa"):
+            en_text = do_translate(prep, "uz", "en")
+            ru_text = do_translate(prep, "uz", "ru")
             return (
-                f"🇬🇧 <b>Inglizcha:</b>\n{html.escape(en_text)}\n\n"
-                f"🇷🇺 <b>Ruscha:</b>\n{html.escape(ru_text)}"
+                f"🇬🇧 <b>Inglisshe:</b>\n{html.escape(en_text)}\n\n"
+                f"🇷🇺 <b>Orıssha:</b>\n{html.escape(ru_text)}"
             )
-        return f"🇺🇿 <b>O'zbekcha:</b>\n{html.escape(uz_text)}"
+        return f"🇺🇿 <b>Awdarma:</b>\n{html.escape(uz_text)}"
     except Exception:
-        res = do_translate(text, "auto", "uz")
+        res = do_translate(prep, "auto", "uz")
         return html.escape(res)
+
+
+@bot.message_handler(commands=["tr", "awdar", "tarjima"])
+def tr_cmd(message):
+    register_group(message.chat)
+    parts = (message.text or "").split(maxsplit=1)
+    target_text = parts[1].strip() if len(parts) > 1 else ""
+    if not target_text and message.reply_to_message:
+        target_text = message.reply_to_message.text or message.reply_to_message.caption or ""
+    if not target_text:
+        bot.reply_to(
+            message,
+            "✍️ Awdarma qılıw ushın: <code>/tr tekst</code> jazıń yaki xabarǵa <i>Reply</i> qılıp <code>/tr</code> basıń.",
+        )
+        return
+    try:
+        body = detect_and_translate(target_text)
+        bot.reply_to(message, body)
+    except Exception:
+        bot.reply_to(message, "❌ Awdarma qılıwda qátelik.")
+
+
+_WEEKDAY_ALIASES = {
+    0: ["duyshembi", "duyshambi", "dushanba", "dushanbi", "ponedelnik"],
+    1: ["siyshembi", "seyshambi", "seshanba", "seshanbi", "vtornik"],
+    2: ["sarshembi", "sharshambi", "chorshanba", "sreda"],
+    3: ["piyshembi", "payshambi", "payshanba", "chetverg"],
+    4: ["juma", "jumaa", "pyatnica", "pyatnitsa"],
+    5: ["shembi", "shanba", "shanbi", "subbota"],
+    6: ["ekshembi", "yakshanba", "voskresenye"],
+}
+
+_SUBJECT_ALIASES = [
+    (0, ["fizika"]),
+    (1, ["ingliz", "inglisshe", "angliyskiy", "shet tili", "chet tili", "english"]),
+    (2, ["geodeziya", "geodez"]),
+    (3, ["matematika", "matem", "joqari matematika", "oliy matematika"]),
+    (4, ["tariyx", "tarix", "istoriya"]),
+    (5, ["qaraqalpaq", "qoraqalpoq", "qq tili"]),
+    (6, ["rus tili", "oris tili", "orissha", "russkiy", "russha"]),
+]
+
+
+def _send_subject_card(message, idx, ntext):
+    s = DATA["subjects"][idx]
+    if s.get("single"):
+        items = s.get("lectures") or []
+        body = "Materialdı tańlań (ústine bassańız PDF ashıladı):" if items else "Ele qosılmaǵan."
+        bot.reply_to(
+            message,
+            header("📚", html.escape(s["name"])) + body,
+            reply_markup=kb(
+                *[btn(it["title"], f"it:{idx}:l:{j}") for j, it in enumerate(items)],
+                btn("📚 Barlıq pánler", "menu_subjects"),
+            ),
+        )
+        return
+    # Agar aniq lekciya yoki ameliy/lab so'ragan bo'lsa:
+    wants_lec = any(w in ntext for w in ["lekciya", "leksiya", "maruza"])
+    wants_lab = any(w in ntext for w in ["ameliy", "amaliy", "lab", "laboratoriya", "labaratoriya", "seminar"])
+    sec_icon, sec_name = second_section(s["name"])
+    if wants_lec and not wants_lab:
+        bot.reply_to(
+            message,
+            header("📖", f"{html.escape(s['name'])} — Lekciyalar") + "Temanı tańlań:",
+            reply_markup=kb(
+                *[btn(it["title"], f"it:{idx}:l:{j}") for j, it in enumerate(s["lectures"])],
+                btn("⬅️ Bólimler", f"s:{idx}"),
+            ),
+        )
+    elif wants_lab and not wants_lec:
+        bot.reply_to(
+            message,
+            header(sec_icon, f"{html.escape(s['name'])} — {sec_name}") + "Temanı tańlań:",
+            reply_markup=kb(
+                *[btn(it["title"], f"it:{idx}:b:{j}") for j, it in enumerate(s["labs"])],
+                btn("⬅️ Bólimler", f"s:{idx}"),
+            ),
+        )
+    else:
+        bot.reply_to(
+            message,
+            header("📚", html.escape(s["name"])) + "Bólimdi tańlań:",
+            reply_markup=kb(
+                btn(f"📖 Lekciyalar ({len(s['lectures'])})", f"sl:{idx}"),
+                btn(f"{sec_icon} {sec_name} ({len(s['labs'])})", f"sb:{idx}"),
+                btn("📚 Barlıq pánler", "menu_subjects"),
+            ),
+        )
+
+
+def try_smart_assistant(message):
+    """Qoraqalpoq va o'zbek tillarida berilgan savollarga (jadval, fanlar, kurator, starosta) javob beradi."""
+    ntext = norm_qq(message.text or "")
+    if not ntext:
+        return False
+    words = set(ntext.split())
+    is_group = message.chat.type in ("group", "supergroup")
+
+    sched_words = {
+        "sabaq", "sabaqlar", "sabaqlari", "dars", "darslar", "para", "paralar",
+        "keste", "kestesi", "jadval", "jadvali", "raspisaniye", "raspisaniya",
+        "xana", "xanada", "kabinet", "auditoriya",
+    }
+    question_words = {
+        "ne", "nima", "qaysi", "qanday", "neshe", "nechta", "nechenshi", "nechanchi",
+        "barma", "bormi", "qashan", "qachon", "neshede", "nechada", "saat", "soat",
+    }
+
+    # 1. Ertaga / Erteńgi darslar
+    if words & {"erten", "erteng", "ertengi", "ertaga", "ertangi", "zavtra"}:
+        if (words & sched_words) or (words & question_words) or len(words) <= 3:
+            bot.reply_to(
+                message,
+                tomorrow_text(),
+                reply_markup=kb(btn("📅 Háptelik keste", "sch_week"), btn("📚 Pánler", "menu_subjects"), width=2),
+            )
+            return True
+
+    # 2. Bugungi / Búgingi darslar
+    if words & {"bugin", "bugingi", "bugun", "bugungi", "segodnya"}:
+        if (words & sched_words) or (words & question_words) or len(words) <= 3:
+            bot.reply_to(
+                message,
+                today_text(),
+                reply_markup=kb(btn("📆 Erteńgi keste", "sch_tomorrow"), btn("📅 Háptelik", "sch_week"), width=2),
+            )
+            return True
+
+    # 3. Hafta kunlari bo'yicha (Dúyshembi, Siyshembi, ...)
+    for day_idx, aliases in _WEEKDAY_ALIASES.items():
+        if any(a in words for a in aliases):
+            if (words & sched_words) or (words & question_words) or not is_group:
+                bot.reply_to(
+                    message,
+                    day_schedule_text(day_idx),
+                    reply_markup=kb(btn("📅 Háptelik keste", "sch_week"), width=1),
+                )
+                return True
+
+    # 4. Haftalik jadval yoki umumiy "sabaq kestesi" / "bugun nechenshi para"
+    if (
+        ("hapte" in words or "haptelik" in words or "hafta" in words or "haftalik" in words)
+        and (words & sched_words)
+    ):
+        bot.reply_to(message, week_text())
+        return True
+
+    if any(
+        phrase in ntext
+        for phrase in [
+            "sabaq keste", "dars jadval", "nechenshi para", "neshe para",
+            "saat neshede sabaq", "sabaq saat neshede", "qaysi xana", "qaysi kabinet",
+        ]
+    ) or ntext in ("keste", "jadval", "sabaq", "sabaqlar", "raspisaniye", "raspisaniya"):
+        bot.reply_to(
+            message,
+            today_text(),
+            reply_markup=kb(btn("📆 Erteńgi keste", "sch_tomorrow"), btn("📅 Háptelik", "sch_week"), width=2),
+        )
+        return True
+
+    # 5. Fanlar va PDF materiallar
+    mat_triggers = {
+        "pdf", "lekciya", "leksiya", "maruza", "ameliy", "amaliy", "lab",
+        "laboratoriya", "labaratoriya", "kitap", "kitob", "fayl", "material",
+        "tema", "mavzu", "tasla", "tashla", "jiber", "ber", "barma", "bormi",
+        "kerek", "kerak", "bot", "katastr1abot",
+    }
+    for idx, aliases in _SUBJECT_ALIASES:
+        if any(a in ntext for a in aliases):
+            if not is_group or (words & mat_triggers) or len(words) <= 3:
+                _send_subject_card(message, idx, ntext)
+                return True
+
+    if ntext in ("fanlar", "sabaqlar", "panler", "pdf", "lekciyalar", "kitaplar") or (
+        ("pdf" in words or "lekciya" in words) and ("barma" in words or "bormi" in words or "jiber" in words or "tasla" in words)
+    ):
+        subjects_cmd(message)
+        return True
+
+    # 6. Kurator, Starosta, Guruh ro'yxati, Imtihonlar
+    if "kurator" in ntext or "ziyada" in words or "avezova" in words:
+        if not is_group or (words & {"kim", "nomer", "nomeri", "raqami", "tel", "lichka", "barma", "bormi"}) or len(words) <= 3:
+            bot.reply_to(message, person("👩‍🏫 <b>Kurator</b>", CURATOR))
+            return True
+
+    if "starosta" in ntext or ("abbaz" in words and ("nomer" in ntext or "tel" in ntext)):
+        if not is_group or (words & {"kim", "nomer", "nomeri", "raqami", "tel", "lichka", "barma", "bormi"}) or len(words) <= 3:
+            bot.reply_to(message, person("⭐ <b>Starosta</b>", STAROSTA))
+            return True
+
+    if any(p in ntext for p in ["gruppa dizimi", "studentler dizimi", "guruh royxati", "guruhdoshlar", "kurslaslar", "gruppalaslar"]):
+        lines = []
+        n = 0
+        for m in DATA["mates"]:
+            if m.get("role"):
+                line = f"⭐ <b>{m['role']}:</b> {html.escape(m['name'])}"
+            else:
+                n += 1
+                line = f"{n}. {html.escape(m['name'])}"
+            if m.get("tg"):
+                line += f" — @{m['tg']}"
+            if m.get("phone"):
+                line += f" — {m['phone']}"
+            lines.append(line)
+        bot.reply_to(message, header("👥", f"Gruppalaslar — {html.escape(DATA['group'])}") + "\n".join(lines))
+        return True
+
+    if ("imtixan" in ntext or "imtihon" in ntext or "sessiya" in ntext) and (
+        words & {"qashan", "qachon", "barma", "bormi", "keste", "jadval"}
+    ):
+        today = datetime.now(TZ).date()
+        lines = []
+        for e in sorted(DATA["exams"], key=lambda x: x["date"]):
+            d = datetime.strptime(e["date"], "%Y-%m-%d").date()
+            left = (d - today).days
+            if left >= 0:
+                lines.append(f"📝 <b>{html.escape(e['name'])}</b>\n     🗓 {e['date']} — ⏳ {left} kún qaldı")
+        body = "\n\n".join(lines) if lines else "Házirshe rejelestirilgen imtixan joq."
+        bot.reply_to(message, header("📝", "Imtixanlar") + body)
+        return True
+
+    # 7. Guruhda "bot awdar ..." yoki "bot tarjima ..."
+    if is_group and ("awdar" in words or "tarjima" in words) and ("bot" in words or message.reply_to_message):
+        target = message.reply_to_message.text if message.reply_to_message else message.text
+        if target:
+            bot.reply_to(message, detect_and_translate(target))
+            return True
+
+    return False
 
 
 @bot.message_handler(func=lambda m: True, content_types=["text"])
 def translate_message(message):
+    register_group(message.chat)
     u = register_user(message.from_user)
+    is_group = message.chat.type in ("group", "supergroup")
+
+    # Guruhda oddiy suhbatga xalaqit bermaymiz — faqat savollarga javob beramiz
+    if is_group:
+        try_smart_assistant(message)
+        return
+
     direction = user_direction.get(message.chat.id)
     if not direction:
         saved_tr = u.get("tr")
         if isinstance(saved_tr, list) and len(saved_tr) == 2:
             direction = (saved_tr[0], saved_tr[1])
+
+    # Agar foydalanuvchi aniq tarjima yo'nalishini tanlamagan bo'lsa va jadval/fan so'rasa:
+    if not direction and try_smart_assistant(message):
+        return
+
     nav_kb = kb(
-        btn("🌐 Yo'nalishni tanlash", "menu_translation"),
-        btn("🏠 Asosiy menyu", "back_to_main"),
+        btn("🌐 Baǵdardı tańlaw", "menu_translation"),
+        btn("🏠 Bas menyu", "back_to_main"),
         width=2,
     )
     try:
@@ -998,37 +1450,83 @@ def translate_message(message):
     except Exception:
         bot.reply_to(
             message,
-            "❌ Tarjima qilishda xatolik. Keyinroq urinib ko'ring.",
+            "❌ Awdarma qılıwda qátelik. Keyinirek urınıp kóriń.",
             reply_markup=nav_kb,
         )
 
 
-# ---------- Eslatmalar ----------
+# ---------- Eslatmalar (07:30 ertalabki keste + 15 daqiqa oldin eslatma) ----------
+MORNING_TIME = "07:30"
+
+
 def reminder_loop():
     sent = set()
     while True:
         try:
             now = datetime.now(TZ)
+            today_str = now.strftime("%Y-%m-%d")
+            now_hm = now.strftime("%H:%M")
+            wday = now.weekday()
+            today_lessons = DATA["schedule"].get(str(wday), [])
+
+            # 1) Har kuni ertalab 07:30 da dars bor kunlari guruhlarga va obunachilarga jadval yuborish
+            morning_key = (today_str, "MORNING_0730")
+            if now_hm == MORNING_TIME and today_lessons and morning_key not in sent:
+                sent.add(morning_key)
+                morning_msg = (
+                    f"☀️ <b>Qayırli tań, {html.escape(DATA['group'])} gruppası!</b>\n"
+                    f"📅 <b>Búgingi sabaq kestesi — {DAYS_QQ[wday]} ({DAYS[wday]}):</b>\n"
+                    f"{LINE}\n"
+                    f"{fmt_day(wday)}\n\n"
+                    f"📚 <i>Barlıq PDF hám lekciyalar: @Katastr1a_bot</i>"
+                )
+                for gid, g in list(DATA.get("groups", {}).items()):
+                    if g.get("remind", True):
+                        try:
+                            bot.send_message(
+                                int(gid),
+                                morning_msg,
+                                reply_markup=kb(btn("📚 Fanlar / PDF", "menu_subjects"), width=1),
+                            )
+                        except Exception:
+                            pass
+
+            # 2) Har bir para boshlanishidan 15 daqiqa oldin eslatma
             target = (now + timedelta(minutes=REMIND_BEFORE_MIN)).strftime("%H:%M")
-            for item in DATA["schedule"].get(str(now.weekday()), []):
-                key = (now.strftime("%Y-%m-%d"), item["time"], item["name"])
+            for item in today_lessons:
+                key = (today_str, item["time"], item["name"])
                 if item["time"] == target and key not in sent:
                     sent.add(key)
+                    t_range = f"{item['time']} - {item['end']}" if item.get("end") else item["time"]
+                    tp = f" ({html.escape(item['type'])})" if item.get("type") else ""
+                    extra = []
+                    if item.get("teacher"):
+                        extra.append(f"👩‍🏫 {html.escape(item['teacher'])}")
+                    if item.get("room"):
+                        extra.append(f"🚪 {html.escape(item['room'])}")
+                    extra_line = ("\n" + " • ".join(extra)) if extra else ""
+                    remind_msg = (
+                        f"⏰ <b>{REMIND_BEFORE_MIN} minuttan keyin sabaq baslanadı!</b>\n"
+                        f"📘 <b>{html.escape(item['name'])}</b>{tp}\n"
+                        f"🕒 Waqtı: <b>{html.escape(t_range)}</b>{extra_line}"
+                    )
                     for uid, u in list(DATA["users"].items()):
                         if u.get("remind", True):
                             try:
-                                bot.send_message(
-                                    int(uid),
-                                    f"⏰ {REMIND_BEFORE_MIN} daqiqadan keyin dars: "
-                                    f"<b>{html.escape(item['name'])}</b> ({item['time']})",
-                                )
+                                bot.send_message(int(uid), remind_msg)
+                            except Exception:
+                                pass
+                    for gid, g in list(DATA.get("groups", {}).items()):
+                        if g.get("remind", True):
+                            try:
+                                bot.send_message(int(gid), remind_msg)
                             except Exception:
                                 pass
             if len(sent) > 500:
                 sent.clear()
         except Exception:
             pass
-        time.sleep(30)
+        time.sleep(25)
 
 
 def start_health_server():
@@ -1138,6 +1636,14 @@ if __name__ == "__main__":
         (bot.set_my_description,
          "🎓 Katastr 1-A Hub — guruh uchun shaxsiy yordamchi:\n"
          "📚 fanlar va ma'ruzalar\n📅 dars jadvali va eslatmalar\n🌐 tarjimon\n📝 imtihonlar\n📢 e'lonlar"),
+        (bot.set_my_commands, [
+            types.BotCommand("start", "🏠 Bosh menyu"),
+            types.BotCommand("bugin", "🕒 Búgingi sabaqlar (Bugungi darslar)"),
+            types.BotCommand("erten", "📆 Erteńgi sabaqlar (Ertangi darslar)"),
+            types.BotCommand("keste", "📅 Háptelik sabaq kestesi"),
+            types.BotCommand("fanlar", "📚 Fanlar hám PDF materiallar"),
+            types.BotCommand("tr", "🌐 Awdarma / Tarjima"),
+        ]),
     ]:
         try:
             fn(arg)
