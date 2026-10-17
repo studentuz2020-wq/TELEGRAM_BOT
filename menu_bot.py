@@ -433,8 +433,11 @@ def info_text():
 # ---------- /start, /help, /myid ----------
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    register_user(message.from_user)
+    u = register_user(message.from_user)
     user_direction.pop(message.chat.id, None)
+    if u.get("tr"):
+        u.pop("tr", None)
+        save()
     if os.path.exists(BANNER):
         try:
             with open(BANNER, "rb") as f:
@@ -760,6 +763,10 @@ def callback_handler(call):
 
     elif data == "back_to_main":
         user_direction.pop(chat_id, None)
+        u = register_user(call.from_user)
+        if u.get("tr"):
+            u.pop("tr", None)
+            save()
         show(call, header("🏠", "Asosiy menyu") + f"🎓 {html.escape(DATA['group'])}\nBo'limni tanlang 👇",
              main_menu(uid))
 
@@ -771,6 +778,9 @@ def callback_handler(call):
     elif data in DIRECTIONS:
         src, dest, label = DIRECTIONS[data]
         user_direction[chat_id] = (src, dest)
+        u = register_user(call.from_user)
+        u["tr"] = [src, dest]
+        save()
         show(call, header("🌐", "Tarjimon") + f"✅ Yo'nalish: <b>{label}</b>\n\n"
              "✍️ Endi tarjima qilinadigan matnni yuboring.",
              kb(btn("⬅️ Orqaga", "menu_translation")))
@@ -878,21 +888,119 @@ def callback_handler(call):
 
 
 # ---------- Tarjima ----------
+def do_translate(text, src="auto", dest="uz"):
+    import requests
+
+    text = (text or "").strip()
+    if not text:
+        return ""
+    sl = src or "auto"
+    # 1-usul: Google Translate GTX JSON API (eng tez va barqaror)
+    try:
+        r = requests.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={"client": "gtx", "sl": sl, "tl": dest, "dt": "t", "q": text},
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=12,
+        )
+        r.raise_for_status()
+        data = r.json()
+        out = "".join(seg[0] for seg in data[0] if seg and seg[0])
+        if out:
+            return out
+    except Exception:
+        pass
+    # 2-usul: Google clients5 API
+    try:
+        r = requests.get(
+            "https://clients5.google.com/translate_a/t",
+            params={"client": "dict-chrome-ex", "sl": sl, "tl": dest, "q": text},
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=12,
+        )
+        r.raise_for_status()
+        data = r.json()
+        if isinstance(data, list) and data:
+            first = data[0]
+            out = first[0] if isinstance(first, list) else str(first)
+            if out:
+                return out
+    except Exception:
+        pass
+    # 3-usul: MyMemory API
+    try:
+        pair_src = "uz" if sl == "auto" else sl
+        r = requests.get(
+            "https://api.mymemory.translated.net/get",
+            params={"q": text[:480], "langpair": f"{pair_src}|{dest}"},
+            timeout=12,
+        )
+        r.raise_for_status()
+        out = (r.json().get("responseData") or {}).get("translatedText")
+        if out:
+            return out
+    except Exception:
+        pass
+    # 4-usul: deep_translator zaxira
+    return GoogleTranslator(source=sl, target=dest).translate(text)
+
+
+def detect_and_translate(text):
+    import requests
+
+    try:
+        r = requests.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={"client": "gtx", "sl": "auto", "tl": "uz", "dt": "t", "q": text},
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=12,
+        )
+        r.raise_for_status()
+        data = r.json()
+        detected = data[2] if len(data) > 2 else "uz"
+        uz_text = "".join(seg[0] for seg in data[0] if seg and seg[0])
+        if detected == "uz":
+            en_text = do_translate(text, "uz", "en")
+            ru_text = do_translate(text, "uz", "ru")
+            return (
+                f"🇬🇧 <b>Inglizcha:</b>\n{html.escape(en_text)}\n\n"
+                f"🇷🇺 <b>Ruscha:</b>\n{html.escape(ru_text)}"
+            )
+        return f"🇺🇿 <b>O'zbekcha:</b>\n{html.escape(uz_text)}"
+    except Exception:
+        res = do_translate(text, "auto", "uz")
+        return html.escape(res)
+
+
 @bot.message_handler(func=lambda m: True, content_types=["text"])
 def translate_message(message):
+    u = register_user(message.from_user)
     direction = user_direction.get(message.chat.id)
     if not direction:
-        bot.reply_to(message, "Menyu uchun /start bosing.")
-        return
-    src, dest = direction
+        saved_tr = u.get("tr")
+        if isinstance(saved_tr, list) and len(saved_tr) == 2:
+            direction = (saved_tr[0], saved_tr[1])
+    nav_kb = kb(
+        btn("🌐 Yo'nalishni tanlash", "menu_translation"),
+        btn("🏠 Asosiy menyu", "back_to_main"),
+        width=2,
+    )
     try:
-        result = GoogleTranslator(source=src, target=dest).translate(message.text)
-        bot.reply_to(message, html.escape(result))
-        u = register_user(message.from_user)
+        if direction:
+            src, dest = direction
+            result = do_translate(message.text, src, dest)
+            bot.reply_to(message, html.escape(result), reply_markup=nav_kb)
+        else:
+            body = detect_and_translate(message.text)
+            bot.reply_to(message, body, reply_markup=nav_kb)
         u["translations"] = u.get("translations", 0) + 1
         save()
     except Exception:
-        bot.reply_to(message, "❌ Tarjima qilishda xatolik. Keyinroq urinib ko'ring.")
+        bot.reply_to(
+            message,
+            "❌ Tarjima qilishda xatolik. Keyinroq urinib ko'ring.",
+            reply_markup=nav_kb,
+        )
 
 
 # ---------- Eslatmalar ----------
@@ -1003,7 +1111,7 @@ def start_health_server():
                 dest = (qs.get("dest") or ["en"])[0]
                 q = (qs.get("q") or [""])[0]
                 try:
-                    res = GoogleTranslator(source=src, target=dest).translate(q) if q else ""
+                    res = do_translate(q, src, dest) if q else ""
                     body = json.dumps({"result": res}, ensure_ascii=False).encode("utf-8")
                 except Exception:
                     body = json.dumps({"error": "Tarjima qilishda xatolik"}).encode("utf-8")
