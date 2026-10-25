@@ -224,6 +224,11 @@
       <div id="examList">Rejelestirilgen imtixan joq.</div>
     </div>
 
+    <div class="card">
+      <h3><span>🎂 Jaqın tuwılǵan kúnler</span></h3>
+      <div id="upcomingBdays">Júklenbekte...</div>
+    </div>
+
     <div class="card" id="leadersCard"></div>
   </div>
 
@@ -245,6 +250,7 @@
   <div class="section" id="tab-mates">
     <input class="search" id="mateSearch" placeholder="🔍 Atı boyınsha izlew..." oninput="renderMates()" />
     <div class="card" id="matesContainer"></div>
+    <div class="card" id="bdayContainer"></div>
   </div>
 
   <!-- TARJIMON -->
@@ -277,8 +283,19 @@
   if (tg) { tg.ready(); tg.expand(); }
 
   const DAYS = ["Dúyshembi","Siyshembi","Sárshembi","Piyshembi","Juma","Shembi","Ekshembi"];
+  const MONTHS = ["","Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
   let APP = null;
   let selectedDay = (new Date().getDay() + 6) % 7;
+
+  function calcBdayLeft(b) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let nxt = new Date(today.getFullYear(), b.month - 1, b.day);
+    if (nxt < today) nxt = new Date(today.getFullYear() + 1, b.month - 1, b.day);
+    const left = Math.round((nxt - today) / 86400000);
+    const age = nxt.getFullYear() - b.year;
+    return { left, age };
+  }
 
   function esc(s) {
     return String(s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -311,8 +328,12 @@
     selectedDay = idx;
     document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
     document.getElementById('selDayTitle').textContent = DAYS[idx];
-    const items = (APP.schedule[String(idx)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
     const box = document.getElementById('daySchedule');
+    if (APP.schedule_expired) {
+      box.innerHTML = '<div style="color:var(--muted);font-size:14px;">⏳ Bul hápte ushın maǵlıwmat ele kiritilmegen</div>';
+      return;
+    }
+    const items = (APP.schedule[String(idx)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
     if (!items.length) {
       box.innerHTML = '<div style="color:var(--muted);font-size:14px;">🎉 Bul kúnde sabaq joq</div>';
       return;
@@ -329,7 +350,21 @@
       const tgLink = m.tg ? `<a class="contact-link" href="https://t.me/${esc(m.tg)}">@${esc(m.tg)}</a>` : '';
       return `<div class="item-row"><span>${label}</span>${tgLink}</div>`;
     });
-    document.getElementById('matesContainer').innerHTML = rows.join('') || '<div style="color:var(--muted)">Tabılmadı</div>';
+    document.getElementById('matesContainer').innerHTML = `<h3><span>👥 Gruppalaslar dizimi</span></h3>` + (rows.join('') || '<div style="color:var(--muted)">Tabılmadı</div>');
+
+    const bdays = (APP.birthdays || []).filter(b => b.name.toLowerCase().includes(q));
+    let bHtml = `<h3><span>🎂 Tuwılǵan kúnler</span><span class="badge">${bdays.length}</span></h3>`;
+    for (let m = 1; m <= 12; m++) {
+      const list = bdays.filter(b => b.month === m).sort((a,b) => a.day - b.day);
+      if (!list.length) continue;
+      bHtml += `<div style="margin-top:8px;font-weight:700;color:var(--gold);font-size:13px;">📅 ${m}. ${MONTHS[m]}</div>`;
+      bHtml += list.map(b => {
+        const { left } = calcBdayLeft(b);
+        const pill = left === 0 ? `<span class="badge">🎉 Búgin!</span>` : `<span style="font-size:12px;color:var(--muted);">${b.day}-${MONTHS[m].toLowerCase()} ${b.year}</span>`;
+        return `<div class="item-row"><span>🎂 <b>${esc(b.name)}</b></span>${pill}</div>`;
+      }).join('');
+    }
+    document.getElementById('bdayContainer').innerHTML = bHtml;
   }
 
   async function doTranslate() {
@@ -360,9 +395,11 @@
     // Bugungi darslar
     document.getElementById('todayLabel').textContent = DAYS[selectedDay];
     const tItems = (APP.schedule[String(selectedDay)] || []).slice().sort((a,b) => a.time.localeCompare(b.time));
-    document.getElementById('todayList').innerHTML = tItems.length
-      ? tItems.map(fmtLessonRow).join('')
-      : '<div style="color:var(--muted);font-size:14px;">Búgin sabaq joq yaki dem alıs kúni!</div>';
+    document.getElementById('todayList').innerHTML = APP.schedule_expired
+      ? '<div style="color:var(--muted);font-size:14px;">⏳ Bul hápte ushın maǵlıwmat ele kiritilmegen</div>'
+      : (tItems.length
+        ? tItems.map(fmtLessonRow).join('')
+        : '<div style="color:var(--muted);font-size:14px;">Búgin sabaq joq yaki dem alıs kúni!</div>');
 
     // E'lonlar
     const anns = (APP.announcements || []).slice(-5).reverse();
@@ -377,6 +414,15 @@
       document.getElementById('examList').innerHTML = APP.exams.map(e =>
         `<div class="item-row"><span>📝 ${esc(e.name)}</span><span class="badge">${esc(e.date)}</span></div>`
       ).join('');
+    }
+
+    // Jaqın tuwılǵan kúnler
+    if ((APP.birthdays || []).length) {
+      const enriched = APP.birthdays.map(b => ({ ...b, ...calcBdayLeft(b) })).sort((a,b) => a.left - b.left).slice(0, 3);
+      document.getElementById('upcomingBdays').innerHTML = enriched.map(b => {
+        const badge = b.left === 0 ? '🎉 Búgin!' : (b.left === 1 ? '🔥 Erteń!' : `⏳ ${b.left} kún`);
+        return `<div class="item-row"><span>🎂 <b>${esc(b.name)}</b> <small style="color:var(--muted);">(${b.day}-${MONTHS[b.month].toLowerCase()}, ${b.age} jas)</small></span><span class="badge">${badge}</span></div>`;
+      }).join('');
     }
 
     // Mas'ullar

@@ -1,80 +1,17 @@
 {
-  "group": "Guruh raqami kiritilmagan",
-  "users": {
-    "7439478546": {
-      "joined": "2026-10-15",
-      "translations": 0,
-      "remind": true,
-      "name": "Jumabaev Toqtarbay",
-      "username": "qwertyz1026"
-    }
-  },
-  "subjects": [
-    {
-      "name": "🔬 Fizika",
-      "lectures": [
-        {
-          "title": "1-mavzu: Kinematika va dinamika",
-          "type": "text",
-          "content": "Materiallar tez orada qo'shiladi."
-        },
-        {
-          "title": "2-mavzu: Molekulyar fizika",
-          "type": "text",
-          "content": "Materiallar tez orada qo'shiladi."
-        }
-      ],
-      "labs": [
-        {
-          "title": "1-Lab: O'lchashlar va xatolar",
-          "type": "text",
-          "content": "Materiallar tez orada qo'shiladi."
-        },
-        {
-          "title": "2-Lab: Qattiq jism zichligi",
-          "type": "text",
-          "content": "Materiallar tez orada qo'shiladi."
-        }
-      ]
-    }
-  ],
-  "schedule": {
-    "0": [
-      {
-        "time": "09:00",
-        "name": "Fizika"
-      },
-      {
-        "time": "10:30",
-        "name": "Matematika"
-      }
-    ],
-    "1": [
-      {
-        "time": "09:00",
-        "name": "Ingliz tili"
-      }
-    ],
-    "2": [
-      {
-        "time": "09:00",
-        "name": "Fizika (Lab)"
-      }
-    ]
-  },
-  "announcements": [],
   "exams": [],
+  "group": "Katastr 1-a",
   "mates": [
     {
+      "tg": "Avezova_Ziyada",
       "name": "Avezova Ziyada",
       "role": "Kurator",
-      "tg": "Avezova_Ziyada",
       "phone": "+998 91 395 08 76"
     },
     {
+      "tg": "AbbazAmaniyazov",
       "name": "Abbaz Amaniyazov",
       "role": "Starosta",
-      "tg": "AbbazAmaniyazov",
       "phone": "+998 95 887 04 98"
     },
     {
@@ -163,6 +100,1133 @@
     },
     {
       "name": "Kalbaev Karjaubay Nurlibay uli"
+    }
+  ],
+  "users": {
+    "1059757748": {
+      "name": "Toqtarbay Jumabaev ",
+      "joined": "2026-10-16",
+      "remind": true,
+      "username": "Qaraken_Mirzasi",
+      "translations": 0
+    },
+    "5103346056": {
+      "name": "S",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "luka757",
+      "translations": 0
+    },
+    "5256222471": {
+      "name": "Palvanbaevna_",
+      "joined": "2026-10-16",
+      "remind": true,
+      "username": "khojabaevva",
+      "translations": 0
+    },
+    "5443269528": {
+      "name": "Qoblanbaev",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "5612286217": {
+      "name": "Гулмйра",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "gulmira_031",
+      "translations": 0
+    },
+    "5633018884": {
+      "name": "ᴊᴀǫsɪʟɪǫ ꯭꯭",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "6404457689": {
+      "name": "Maxsud",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "6671721772": {
+      "name": "aytmuratov_",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "7133855043": {
+      "name": "Miyasar Begniyazova",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "Xojabay_qizi",
+      "translations": 0
+    },
+    "7323546425": {
+      "name": "Abbaz Amaniyazov",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "AbbazAmaniyazov",
+      "translations": 0
+    },
+    "7436502562": {
+      "name": "Tawekel",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "7439478546": {
+      "name": "Jumabaev Toqtarbay",
+      "joined": "2026-10-15",
+      "remind": true,
+      "username": "qwertyz1026",
+      "translations": 1
+    },
+    "7714196353": {
+      "name": "Erbol",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 1
+    },
+    "8054832957": {
+      "name": "Alisher Otarbaev",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "Alisher2605",
+      "translations": 0
+    },
+    "8327764578": {
+      "name": "Жанабаев Хасылбек",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "janabaev_678",
+      "translations": 0
+    },
+    "8738488779": {
+      "name": "Сардар",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "8797375705": {
+      "name": "арс",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "jumamuratov_arislan1",
+      "translations": 0
+    },
+    "8818876235": {
+      "name": "Еркебұлан",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "amanzholovme",
+      "translations": 0
+    },
+    "8845231236": {
+      "name": "Dawletmurat Jumamuratov",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    },
+    "8890389012": {
+      "name": "Азизбек",
+      "joined": "2026-10-17",
+      "remind": true,
+      "username": "",
+      "translations": 0
+    }
+  },
+  "groups": {},
+  "schedule": {
+    "0": [
+      {
+        "time": "08:30",
+        "end": "09:50",
+        "name": "O'zbekistonning eng yangi tarixi",
+        "type": "Ma'ruza",
+        "teacher": "SARIBAYEVA N. B.",
+        "room": ""
+      },
+      {
+        "time": "11:30",
+        "end": "12:50",
+        "name": "Fizika",
+        "type": "Ma'ruza",
+        "teacher": "SAPARNIYAZOVA G. K.",
+        "room": ""
+      }
+    ],
+    "1": [
+      {
+        "time": "08:30",
+        "end": "09:50",
+        "name": "Geodeziya 1 bo'lim",
+        "type": "Ma'ruza",
+        "teacher": "KALIMBETOV J. B.",
+        "room": "308 3-korpus"
+      },
+      {
+        "time": "10:00",
+        "end": "11:20",
+        "name": "Chet (inglis) tili",
+        "type": "Amaliy",
+        "teacher": "ABDULLAEV M. A.",
+        "room": "308 3-korpus"
+      },
+      {
+        "time": "11:30",
+        "end": "12:50",
+        "name": "Geodeziya 1 bo'lim",
+        "type": "Amaliy",
+        "teacher": "KALIMBETOV J. B.",
+        "room": "308 3-korpus"
+      }
+    ],
+    "2": [
+      {
+        "time": "08:30",
+        "end": "09:50",
+        "name": "O'zbekistonning eng yangi tarixi",
+        "type": "Seminar",
+        "teacher": "SARIBAYEVA N. B.",
+        "room": ""
+      },
+      {
+        "time": "10:00",
+        "end": "11:20",
+        "name": "Oliy matematika",
+        "type": "Amaliy",
+        "teacher": "BEKIYEV A. B.",
+        "room": "308 3-korpus"
+      },
+      {
+        "time": "11:30",
+        "end": "12:50",
+        "name": "Qoraqalpoq tili",
+        "type": "Amaliy",
+        "teacher": "KUNNAZAROVA SH. M.",
+        "room": ""
+      }
+    ],
+    "3": [
+      {
+        "time": "08:30",
+        "end": "09:50",
+        "name": "Chet (inglis) tili",
+        "type": "Amaliy",
+        "teacher": "ABDULLAEV M. A.",
+        "room": "308 3-korpus"
+      },
+      {
+        "time": "10:00",
+        "end": "11:20",
+        "name": "Fizika",
+        "type": "Laboratoriya",
+        "teacher": "SAPARNIYAZOVA G. K.",
+        "room": ""
+      },
+      {
+        "time": "11:30",
+        "end": "12:50",
+        "name": "Oliy matematika",
+        "type": "Amaliy",
+        "teacher": "BEKIYEV A. B.",
+        "room": "308 3-korpus"
+      }
+    ],
+    "4": [
+      {
+        "time": "08:30",
+        "end": "09:50",
+        "name": "Oliy matematika",
+        "type": "Ma'ruza",
+        "teacher": "BEGLERBEKOV R. J.",
+        "room": ""
+      },
+      {
+        "time": "10:00",
+        "end": "11:20",
+        "name": "Chet (inglis) tili",
+        "type": "Amaliy",
+        "teacher": "ABDULLAEV M. A.",
+        "room": "308 3-korpus"
+      },
+      {
+        "time": "11:30",
+        "end": "12:50",
+        "name": "Geodeziya 1 bo'lim",
+        "type": "Ma'ruza",
+        "teacher": "KALIMBETOV J. B.",
+        "room": "308 3-korpus"
+      }
+    ],
+    "5": [],
+    "6": []
+  },
+  "subjects": [
+    {
+      "labs": [
+        {
+          "type": "document",
+          "title": "1-Lab: Fizikalıq shamalardı ólshew",
+          "content": "BQACAgIAAxkDAAMCatJwKQABi-H974Zfcm3lOU9r0O-jAALr0gAC9bSYSrB2uvV1iPrGPQQ"
+        },
+        {
+          "type": "document",
+          "title": "2-Lab: Qattı denelerdiń tıġızlıġın shtangencirkul hám mikrometr járdeminde anıqlaw",
+          "content": "BQACAgIAAxkDAAMFatJw2Vd1JPt70bLqYaXqqVFRVTYAAvTSAAL1tJhKl0gH65GWlh09BA"
+        },
+        {
+          "type": "document",
+          "title": "3-Lab: Matematik mayatnik jȧrdeminde erkin túsiw tezleniwin anıqlaw labaratoria",
+          "content": "BQACAgIAAxkDAAMHatJw3l5jY6J17mWt42esLM0p0vAAAvbSAAL1tJhK8z7XxA1nQ8Q9BA"
+        },
+        {
+          "type": "document",
+          "title": "4-Lab: Elastiklik modulin iyiliw deformaciyasınan paydalanıp anıqlaw.",
+          "content": "BQACAgIAAxkDAAMJatJw4s85naqJxSAEIcDbIGXvg2AAAvjSAAL1tJhKCYT5IEIbuzA9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-Lab: Suyıqlıqlardıǹ ishki súykeliw koefficentin viskozimetr Hopper KF 32 járdeminde ólshewdi úyreniw",
+          "content": "BQACAgIAAxkDAAMKatJw5KJHOTNJhuj1RRPGRlDbrLYAAvnSAAL1tJhKCn04rwksTB09BA"
+        },
+        {
+          "type": "document",
+          "title": "6-Lab: Qattı deneniń salıstırmlı ıssılıq sıyımlılıġın anıqlaw",
+          "content": "BQACAgIAAxkDAAMNatJw6mEIPlqGGIevaH58YasDU4EAAvzSAAL1tJhKIbHT1Qcmi8k9BA"
+        },
+        {
+          "type": "document",
+          "title": "7-Lab: Mıstıǹ elektroximiyalıq ekvivalentin hȧm elektron zaryadın anıqlaw",
+          "content": "BQACAgIAAxkDAAMPatJw9QJEUJdequQHptQgY7vDcCIAAv_SAAL1tJhKIP20s83fC-s9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-Lab: Ótkizgish qarsılıǵın ampermetr hȧm voltmert jȧrdeminde anılqaw",
+          "content": "BQACAgIAAxkDAAMRatJw-Tkr-Yt02VnRUrwIr6RQG_sAAgHTAAL1tJhKDyhTFoGYqCs9BA"
+        },
+        {
+          "type": "document",
+          "title": "9-Lab: Yarım ótkizgishli diodtıń volt – amperlik xarakteristikasın anıqlaw",
+          "content": "BQACAgIAAxkDAAMTatJw_0hFZT32kp-RDWn507BT8qsAAgPTAAL1tJhKYvMTo5skY3I9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-Lab: Linzanin fokus araligin aniqlaw",
+          "content": "BQACAgIAAxkDAAMVatJxCq43MgABWhLY9-H9P7oUToUkAAIF0wAC9bSYSgHPEcHGfun_PQQ"
+        },
+        {
+          "type": "document",
+          "title": "11-Lab: Jaqtırtılǵanlıqtı fotodatcik jȧrdeminde anılqaw",
+          "content": "BQACAgIAAxkDAAMXatJxEEMFz-PlGRIIGwABbKr1LZJBAAIH0wAC9bSYSkqLM83qF0_cPQQ"
+        },
+        {
+          "type": "document",
+          "title": "12-Lab: Difrakcion reshetkanı ùyreniw hám jaqtılıqtıń tolqın uzınlıǵın tabıw",
+          "content": "BQACAgIAAxkDAAMZatJxHHWwtpO-HRDEK6hE8MGcgpIAAgrTAAL1tJhKH0gco9t9Ogo9BA"
+        }
+      ],
+      "name": "🔬 Fizika",
+      "single": false,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "1-ma'ruza: Klassik mexanikanɪń fizikalɪq tiykarlarɪ. Ilgerlemeli hám sheńber boyɪnsha qozǵalɪs kinematikasɪ. Nuyton nɪzamlarɪ hám impulstiń saqlanɪw nɪzamɪ",
+          "content": "BQACAgIAAxkDAAMDatJwOdYKT_QC2H8RtGSv4KYz4AgAAu3SAAL1tJhKIIn14ny0aMg9BA"
+        },
+        {
+          "type": "document",
+          "title": "2-ma'ruza: dinamika",
+          "content": "BQACAgIAAxkDAAMEatJw1pLhtSSTEgOShVVZBaM3dX4AAvPSAAL1tJhKlhU3SxEAAYVGPQQ"
+        },
+        {
+          "type": "document",
+          "title": "3-ma'ruza: Qattı deneniń sheńber boyɪnsha qozǵalɪs dinamikası",
+          "content": "BQACAgIAAxkDAAMGatJw3FN2Eu0U_tmKkmGySeOULFcAAvXSAAL1tJhKfxxFQAOR5Dk9BA"
+        },
+        {
+          "type": "document",
+          "title": "4-ma'ruza: Suyɪqlɪqlar mexanikasɪ",
+          "content": "BQACAgIAAxkDAAMIatJw4MctPRkLfKw3mdnki9lVhEEAAvfSAAL1tJhKrOROYJ1EoRQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-ma'ruza: Terbelisler",
+          "content": "BQACAgIAAxkDAAMLatJw5seta8Ljzm90SNu4nea_qh0AAvrSAAL1tJhKpEDiOUClTWI9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-ma'ruza: Molekulyar kineikalıq teoriya",
+          "content": "BQACAgIAAxkDAAMMatJw6HqJ-Ps_R9JANNwJ0P71v68AAvvSAAL1tJhKSw04AtQ1QX49BA"
+        },
+        {
+          "type": "document",
+          "title": "7-ma'ruza: Elektr zaryadı hám elektrostatikalıq maydan",
+          "content": "BQACAgIAAxkDAAMOatJw8n7-qhJEBF11vP7q4rxiUngAAv3SAAL1tJhKJ0mzsf-Q6Vg9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-ma'ruza: Elektrostatikalıq maydandaǵı dielektrikler hám elektr maydanındaǵı ótkizgishler",
+          "content": "BQACAgIAAxkDAAMQatJw900tvSImkEZIBb3DScTqLZgAA9MAAvW0mEqxSh-oBKAlCD0E"
+        },
+        {
+          "type": "document",
+          "title": "9-ma'ruza: Djoul – Lenc nızamı",
+          "content": "BQACAgIAAxkDAAMSatJw-9Uo4_h8biuFbg7-YauappcAAgLTAAL1tJhKmhvpe1lqFd89BA"
+        },
+        {
+          "type": "document",
+          "title": "10-ma'ruza: Turaqlɪ elektr togı. Hár tùrli ortalıqta elektr toǵı",
+          "content": "BQACAgIAAxkDAAMUatJxB8ck0E14Mqu4iUOW39qgTiQAAgTTAAL1tJhKxSZhDYn2vZ49BA"
+        },
+        {
+          "type": "document",
+          "title": "11-ma'ruza: Toklardıń vakuumdaǵɪ magnit maydanı",
+          "content": "BQACAgIAAxkDAAMWatJxDoTXtODkSXerE7oEuV-hkjEAAgbTAAL1tJhKtHqoqWfgqik9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-ma'ruza: Magnit aǵɪmɪ. Elektromagnit indukciya",
+          "content": "BQACAgIAAxkDAAMYatJxGa25U6fnznp2ZfpZaX22oPgAAgnTAAL1tJhK6AfBXj5Vfwc9BA"
+        },
+        {
+          "type": "document",
+          "title": "13-ma'ruza: Ózgermeli toq",
+          "content": "BQACAgIAAxkDAAMaatJxHlr2awnv8tSk8nFoFF3IR18AAgvTAAL1tJhKuZkO7xJCZR49BA"
+        },
+        {
+          "type": "document",
+          "title": "14-ma'ruza: Geometrik optika nizamlarɪ",
+          "content": "BQACAgIAAxkDAAMbatJxIVsRusNxTV-teEUgH2yL3EwAAgzTAAL1tJhK7qIyXsJDQs49BA"
+        },
+        {
+          "type": "document",
+          "title": "15-ma'ruza: Atom hám atom yadrosınıń dúzilisi",
+          "content": "BQACAgIAAxkDAAMcatJxJYCZYcIz8NvD3O1jmNCXz_gAAg_TAAL1tJhKpTtYvltJWIc9BA"
+        },
+        {
+          "type": "document",
+          "title": "ТЕРМОДИНАМИКА",
+          "content": "BQACAgIAAxkDAAMdatJxJ-VN-zNjun2FBrAoYmsm__8AAhDTAAL1tJhKzTwQbWVrn289BA"
+        }
+      ]
+    },
+    {
+      "labs": [],
+      "name": "🇬🇧 Chet (ingliz) tili",
+      "single": true,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "📕 1-mavzu: Independent Uzbekistan",
+          "content": "BQACAgIAAxkDAAMeatJxMPEdQAI4qnI9so_PZ_4JVpYAAhHTAAL1tJhKBgyHrfOvrT89BA"
+        }
+      ]
+    },
+    {
+      "labs": [
+        {
+          "type": "document",
+          "title": "1-amaliy",
+          "content": "BQACAgIAAxkDAAMfatJxOfxozThJiipiM0jZ5zMQLGcAAhXTAAL1tJhKmR2pcvL_bP09BA"
+        },
+        {
+          "type": "document",
+          "title": "2-amaliy",
+          "content": "BQACAgIAAxkDAAMgatJxROEpi9FaVmC01uFWKU60PbkAAhnTAAL1tJhKf3ZIaZUFMzs9BA"
+        },
+        {
+          "type": "document",
+          "title": "3-amaliy: Теодалит",
+          "content": "BQACAgIAAxkDAAMjatJxWGAhsrHArk0rzJxRlLfbejAAAhzTAAL1tJhKddYp5m27z089BA"
+        },
+        {
+          "type": "document",
+          "title": "3-amaliy",
+          "content": "BQACAgIAAxkDAAMkatJxXI-1HLNhx19ju54KFhG5KP0AAh3TAAL1tJhKduIt3PiMTHs9BA"
+        },
+        {
+          "type": "document",
+          "title": "4-amaliy",
+          "content": "BQACAgIAAxkDAAMmatJxewok1t6Lq8pUL4Gsi0wQY74AAiDTAAL1tJhKHCxjiN6bJHw9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-amaliy",
+          "content": "BQACAgIAAxkDAAMnatJxfV3rBD1KHy_xu5fVEOTXE6MAAiHTAAL1tJhKGhkY2vveuMs9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-amaliy",
+          "content": "BQACAgIAAxkDAAMpatJxic8_o9mMerwqUtJhONy00DwAAiXTAAL1tJhKx0tFobEWAec9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-amaliy",
+          "content": "BQACAgIAAxkDAAMratJxlD3otam0XQ6hvgYxIEN1w4wAAijTAAL1tJhKOprudnxoCs09BA"
+        },
+        {
+          "type": "document",
+          "title": "7-amaliy",
+          "content": "BQACAgIAAxkDAAMtatJxrXFkE7DRGxiXiPkGP-TRUvUAAirTAAL1tJhK6BW6F6RJGPw9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-amaliy",
+          "content": "BQACAgIAAxkDAAMvatJxuj5W9GbfbAABISlpR3xjOVWNAAIs0wAC9bSYSheN3eUnfYl2PQQ"
+        },
+        {
+          "type": "document",
+          "title": "9-amaliy: Yuqori aniqlikdagi nivelirlar va invar reykalar",
+          "content": "BQACAgIAAxkDAAMwatJxvBDWr6QxahDjEh_uFnJaArYAAi3TAAL1tJhKgD8dePkUaqo9BA"
+        },
+        {
+          "type": "document",
+          "title": "9-amaliy",
+          "content": "BQACAgIAAxkDAAMyatJxzsHfW1LVxaqmR93iXnbP7SwAAjDTAAL1tJhKqNvr6cOyLgw9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-amaliy",
+          "content": "BQACAgIAAxkDAAM0atJx4YsYUkoVXXBASY3MPnUM8-kAAjPTAAL1tJhKijBuAwWUMsM9BA"
+        },
+        {
+          "type": "document",
+          "title": "11-amaliy",
+          "content": "BQACAgIAAxkDAAM2atJx7OgjERHmLSVRlst7sJivk7oAAjXTAAL1tJhKN8ciRDm-4Qc9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-amaliy: Maвзу-амалиёт",
+          "content": "BQACAgIAAxkDAAM3atJx7Ud7cgeDFxDz_8LF__2FOQQAAjbTAAL1tJhKy-JXdKhoYKc9BA"
+        },
+        {
+          "type": "document",
+          "title": "13-amaliy: Maвзу-амалиёт",
+          "content": "BQACAgIAAxkDAAM5atJx98xndcU_pNf5sKEh-AstDX0AAjjTAAL1tJhKHg9-_byGgw49BA"
+        },
+        {
+          "type": "document",
+          "title": "14-amaliy",
+          "content": "BQACAgIAAxkDAAM7atJyCcqh2nRc5CtTQ1eRZrsVkPgAAjrTAAL1tJhK92Xfxuckwd89BA"
+        },
+        {
+          "type": "document",
+          "title": "15-amaliy",
+          "content": "BQACAgIAAxkDAAM9atJyHHE7Y2kTEv11HAePYOMjiLUAAjzTAAL1tJhK2b9le0y-Eh49BA"
+        }
+      ],
+      "name": "📐 Geodeziya 1-bo'lim",
+      "single": false,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "2-ma'ruza",
+          "content": "BQACAgIAAxkDAAMhatJxRi6lUqb_oY707u3Ar89rvbEAAhrTAAL1tJhK1hDPU9jXQ-s9BA"
+        },
+        {
+          "type": "document",
+          "title": "3-ma'ruza",
+          "content": "BQACAgIAAxkDAAMiatJxVhCEzI_GXfqPltBhinDTy_QAAhvTAAL1tJhKSijZn0Il5Aw9BA"
+        },
+        {
+          "type": "document",
+          "title": "4-ma'ruza",
+          "content": "BQACAgIAAxkDAAMlatJxYY656yvEpBadgDT-YiQGK3oAAh7TAAL1tJhK-EptNsqEk3E9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-ma'ruza",
+          "content": "BQACAgIAAxkDAAMoatJxhyW0nY91DlMqAAGe-vEfjYRXAAIk0wAC9bSYSiu4RojLYDFLPQQ"
+        },
+        {
+          "type": "document",
+          "title": "6-ma'ruza",
+          "content": "BQACAgIAAxkDAAMqatJxkgcy4GTANM2-tDDyDpyagAgAAifTAAL1tJhKaTtuZDpr6xM9BA"
+        },
+        {
+          "type": "document",
+          "title": "7-ma'ruza",
+          "content": "BQACAgIAAxkDAAMsatJxmJmFfMtbyWNv4Qd9tpaH3XoAAinTAAL1tJhKzBox_GvWFV89BA"
+        },
+        {
+          "type": "document",
+          "title": "8-ma'ruza",
+          "content": "BQACAgIAAxkDAAMuatJxt9nCzn-zHwZTz-FAyqpSQqkAAivTAAL1tJhKsSV92Qt4ve89BA"
+        },
+        {
+          "type": "document",
+          "title": "9-ma'ruza",
+          "content": "BQACAgIAAxkDAAMxatJxyd6S6DJWcYGqVSD5-SanzBYAAi7TAAL1tJhK-Cectch-dvk9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-ma'ruza",
+          "content": "BQACAgIAAxkDAAMzatJx35bksJZikF4sThw5OKpyHWUAAjLTAAL1tJhKy3EL3JVI4JI9BA"
+        },
+        {
+          "type": "document",
+          "title": "11-ma'ruza",
+          "content": "BQACAgIAAxkDAAM1atJx48RAXjcbrEnHj93EiF7KORkAAjTTAAL1tJhKboj-da0FOSQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-ma'ruza: ЖЕРДЕ ТОЧКА БИЙИКЛИГИН ӨЛШЕЎ (НИВЕЛИРЛАЎ)",
+          "content": "BQACAgIAAxkDAAM4atJx9EoKtcgQgk_9dsV4Ty4AAe4-AAI30wAC9bSYSu7eIu2VreppPQQ"
+        },
+        {
+          "type": "document",
+          "title": "13-ma'ruza",
+          "content": "BQACAgIAAxkDAAM6atJx__jdRpYY41XH2hiAGrVTYpoAAjnTAAL1tJhKPRxIJFk4mCw9BA"
+        },
+        {
+          "type": "document",
+          "title": "14-ma'ruza",
+          "content": "BQACAgIAAxkDAAM8atJyGvVPIlgz81WQ2NEN00_uLucAAjvTAAL1tJhKuHyPlKPvw2U9BA"
+        },
+        {
+          "type": "document",
+          "title": "16-ma'ruza: Syomka tarmoqlari va ularni qurish",
+          "content": "BQACAgIAAxkDAAM-atJyHQoC8kl-FBsOLSnxU0KJGgYAAj7TAAL1tJhK1mj6bkO_mB09BA"
+        },
+        {
+          "type": "document",
+          "title": "17-ma'ruza",
+          "content": "BQACAgIAAxkDAAM_atJyHkUFqEuKazQJi1PyUTfwc_cAAj_TAAL1tJhKKR4IOP_8jEs9BA"
+        },
+        {
+          "type": "document",
+          "title": "18-ma'ruza: Geodeziyada zamonaviy geodezik asboblarni qo",
+          "content": "BQACAgIAAxkDAANAatJyIBDujMWPGysuPapCMrOxs0EAAkDTAAL1tJhKTXxSySOViLs9BA"
+        }
+      ]
+    },
+    {
+      "labs": [],
+      "name": "➗ Oliy matematika",
+      "single": true,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "📕 Oliy matematika (1-qism, Sh. Xurramov)",
+          "content": "BQACAgIAAxkDAANBatJyOxDzX3flfs4Qif9XaYHWhT8AAkHTAAL1tJhKOs_LexGcE-c9BA"
+        }
+      ]
+    },
+    {
+      "labs": [
+        {
+          "type": "document",
+          "title": "1-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANDatJyP9PvB9C3J7JrfsF5-3Ivs_MAAkPTAAL1tJhKfuO27ug-aWI9BA"
+        },
+        {
+          "type": "document",
+          "title": "2-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANFatJyQiV1Og75xWxdbjMbpbrw3eYAAkbTAAL1tJhKhjq1ud6D8kQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "3-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANHatJyRu2CM8Mm09enWl_e5r2h6wcAAkjTAAL1tJhKn2ty_jlkZxg9BA"
+        },
+        {
+          "type": "document",
+          "title": "4-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANJatJySvsJfHEUgK20NIdT0Okd2McAAkrTAAL1tJhKNdWs5iI0Hrk9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANLatJyTT6XzqsudtDcUzGLCVAKFNwAAkzTAAL1tJhKHvzbywEfJmQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANNatJyUQPUCvXwypUQ3AH-PU9UadkAAk7TAAL1tJhKj282Ys8FEDo9BA"
+        },
+        {
+          "type": "document",
+          "title": "7-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANPatJyVV9VwI2XuOP7DSUvIB0AAeoaAAJQ0wAC9bSYSgEtpnzXBPdhPQQ"
+        },
+        {
+          "type": "document",
+          "title": "7-amaliy (seminar): O‘zbekiston Respublikasida ijtimoiy sohadagi islohotlar",
+          "content": "BQACAgIAAxkDAANQatJyVjMu0cwHr4teGG74xrplWLUAAlHTAAL1tJhKL7K31M6OHN09BA"
+        },
+        {
+          "type": "document",
+          "title": "8-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANSatJyW6R0XSDJlhdURuhxuMyhEhIAAlPTAAL1tJhKRKzI8Ywo_Uc9BA"
+        },
+        {
+          "type": "document",
+          "title": "9-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANTatJyYGo6jT6phBnE-oW4gSzE2v8AAlXTAAL1tJhKnWxMhKcu7ow9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANWatJyagG7KZ_J9o1uBphWcjlDQkoAAljTAAL1tJhKxmcj-fqIksI9BA"
+        },
+        {
+          "type": "document",
+          "title": "11-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANYatJycL3KgKrhLFBjEA1wDg7JR3MAAlrTAAL1tJhK8RMs7592NXc9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-amaliy (seminar)",
+          "content": "BQACAgIAAxkDAANaatJydPEa_PzRXmRybsoMe4-WsAYAAlzTAAL1tJhKz9MXBW0ypXM9BA"
+        }
+      ],
+      "name": "🏛 O'zbekistonning eng yangi tarixi",
+      "single": false,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "1-ma'ruza",
+          "content": "BQACAgIAAxkDAANCatJyPcAD25qdhMvzTj3DDuAB9GkAAkLTAAL1tJhKCDj32MzFRxw9BA"
+        },
+        {
+          "type": "document",
+          "title": "2-ma'ruza",
+          "content": "BQACAgIAAxkDAANEatJyQNqPq0i1AAEEcO6KpW42h8t7AAJF0wAC9bSYSkO7jqZ42pz6PQQ"
+        },
+        {
+          "type": "document",
+          "title": "3-ma'ruza",
+          "content": "BQACAgIAAxkDAANGatJyRDrJb03iVmMrQ0PUf97xF-EAAkfTAAL1tJhKfU4qzpIyfh09BA"
+        },
+        {
+          "type": "document",
+          "title": "4-ma'ruza",
+          "content": "BQACAgIAAxkDAANIatJySN_CTe5kF8cGvv0H0xDmUgUAAknTAAL1tJhKrrcRzxMYx8A9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-ma'ruza",
+          "content": "BQACAgIAAxkDAANKatJyTH6Iuca6wdZiFhkttM_UM8gAAkvTAAL1tJhKvUtJsU80HTQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-ma'ruza",
+          "content": "BQACAgIAAxkDAANMatJyT-u_vT-EG9U-YE0Z0wPO2VIAAk3TAAL1tJhKLz9gqj5wjP49BA"
+        },
+        {
+          "type": "document",
+          "title": "7-ma'ruza",
+          "content": "BQACAgIAAxkDAANOatJyUjQSJ7qhaXA3hXhsuMJM-VwAAk_TAAL1tJhKCYZlfSQx70A9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-ma'ruza",
+          "content": "BQACAgIAAxkDAANRatJyWezYhSNfnvyeCzdWQso9WDsAAlLTAAL1tJhKMwTn6Xa53vE9BA"
+        },
+        {
+          "type": "document",
+          "title": "9-ma'ruza",
+          "content": "BQACAgIAAxkDAANUatJyZ6Gpthl1ZvCm46kpY2QJpCgAAlbTAAL1tJhKoH64nrd4LsY9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-ma'ruza",
+          "content": "BQACAgIAAxkDAANVatJyaOo9GrDYntDf6qcma3ZMEiwAAlfTAAL1tJhKAAFizCf2qjO9PQQ"
+        },
+        {
+          "type": "document",
+          "title": "11-ma'ruza",
+          "content": "BQACAgIAAxkDAANXatJybfCjpzYO_j8hcxxsXaxeSRYAAlnTAAL1tJhKoRv0qnV69J49BA"
+        },
+        {
+          "type": "document",
+          "title": "12-ma'ruza",
+          "content": "BQACAgIAAxkDAANZatJycoN07xTnaG6g-IYfTkMebf8AAlvTAAL1tJhKKf9G1tL8KRA9BA"
+        }
+      ]
+    },
+    {
+      "labs": [
+        {
+          "type": "document",
+          "title": "1-amaliy: Qaraqalpaq tiliniń tarawda qollanılıwı",
+          "content": "BQACAgIAAxkDAANbatJygMSy-MHst8CxrbapPDwCEfwAAl7TAAL1tJhK0Kf6l5R2fOY9BA"
+        },
+        {
+          "type": "document",
+          "title": "2-amaliy: Til ilimi hám onıń basqa ilimler menen baylanısı",
+          "content": "BQACAgIAAxkDAANcatJyhnLya-V42HnjuOhQTYJBQnEAAl_TAAL1tJhKgjXAa20a8dw9BA"
+        },
+        {
+          "type": "document",
+          "title": "3-amaliy: Awıl xojalıǵı hám onıń túrleri",
+          "content": "BQACAgIAAxkDAANdatJyiLpt41Kfr8oTJEjKE5pkhMkAAmDTAAL1tJhKdwIuHV-Bhg09BA"
+        },
+        {
+          "type": "document",
+          "title": "4-amaliy: Qaraqalpaq tiliniń leksikalıq qatlamları",
+          "content": "BQACAgIAAxkDAANeatJyiYb4aywpOwjmYKyXeYdLzY0AAmHTAAL1tJhKWBNxZR3SWac9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-amaliy: Shıǵısı boyınsha qaraqalpaq tili leksikası",
+          "content": "BQACAgIAAxkDAANfatJyi3cOf7mdihZEgdJnjpxGiBwAAmLTAAL1tJhK6u2nQw9euYE9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-amaliy: Sózlik hám onıń túrleri. Terminologiyalıq sózlikler",
+          "content": "BQACAgIAAxkDAANgatJyjImq4fIaY1cPUuu3EyhFC9wAAmPTAAL1tJhK3m6bnpw9uV09BA"
+        },
+        {
+          "type": "document",
+          "title": "7-amaliy: Ádebiy til hám onıń normaları",
+          "content": "BQACAgIAAxkDAANhatJyksYxqA19v5lYI14bHHrVMCEAAmTTAAL1tJhKfGFGb7EQnlI9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-amaliy: Tekst hám onıń túrleri",
+          "content": "BQACAgIAAxkDAANiatJymgZ80OTorJfHf9mcq8Uuog8AAmXTAAL1tJhKGVZ8KkpuW389BA"
+        },
+        {
+          "type": "document",
+          "title": "9-amaliy: Awızeki sóylew stili hám jazba stil túrleri",
+          "content": "BQACAgIAAxkDAANjatJynOyvTQG2eytOG3xYx5m28IAAAmbTAAL1tJhKQjxg1lRYstU9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-amaliy: Tarawlarda qollanılatuǵın is qaǵazları",
+          "content": "BQACAgIAAxkDAANkatJynj--MvlEfU6bs4y6HYIdr30AAmfTAAL1tJhK0gQHSjRkYvQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "11-amaliy: Qaraqalpaq tili grammatikası",
+          "content": "BQACAgIAAxkDAANlatJyn7YZfofmn1IBct2-VBrlECQAAmjTAAL1tJhKeUYOXyJfOps9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-amaliy: Kásiplik qarım-qatnas procesi",
+          "content": "BQACAgIAAxkDAANmatJyoc82f9tfnzFX8fdzoJq8sloAAmrTAAL1tJhKP_IE267Tupw9BA"
+        }
+      ],
+      "name": "📘 Qoraqalpoq tili",
+      "single": false,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "1-ma'ruza: Qaraqalpaq tiliniń tarawda qollanılıwı",
+          "content": "BQACAgIAAxkDAANbatJygMSy-MHst8CxrbapPDwCEfwAAl7TAAL1tJhK0Kf6l5R2fOY9BA"
+        },
+        {
+          "type": "document",
+          "title": "2-ma'ruza: Til ilimi hám onıń basqa ilimler menen baylanısı",
+          "content": "BQACAgIAAxkDAANcatJyhnLya-V42HnjuOhQTYJBQnEAAl_TAAL1tJhKgjXAa20a8dw9BA"
+        },
+        {
+          "type": "document",
+          "title": "3-ma'ruza: Awıl xojalıǵı hám onıń túrleri",
+          "content": "BQACAgIAAxkDAANdatJyiLpt41Kfr8oTJEjKE5pkhMkAAmDTAAL1tJhKdwIuHV-Bhg09BA"
+        },
+        {
+          "type": "document",
+          "title": "4-ma'ruza: Qaraqalpaq tiliniń leksikalıq qatlamları",
+          "content": "BQACAgIAAxkDAANeatJyiYb4aywpOwjmYKyXeYdLzY0AAmHTAAL1tJhKWBNxZR3SWac9BA"
+        },
+        {
+          "type": "document",
+          "title": "5-ma'ruza: Shıǵısı boyınsha qaraqalpaq tili leksikası",
+          "content": "BQACAgIAAxkDAANfatJyi3cOf7mdihZEgdJnjpxGiBwAAmLTAAL1tJhK6u2nQw9euYE9BA"
+        },
+        {
+          "type": "document",
+          "title": "6-ma'ruza: Sózlik hám onıń túrleri. Terminologiyalıq sózlikler",
+          "content": "BQACAgIAAxkDAANgatJyjImq4fIaY1cPUuu3EyhFC9wAAmPTAAL1tJhK3m6bnpw9uV09BA"
+        },
+        {
+          "type": "document",
+          "title": "7-ma'ruza: Ádebiy til hám onıń normaları",
+          "content": "BQACAgIAAxkDAANhatJyksYxqA19v5lYI14bHHrVMCEAAmTTAAL1tJhKfGFGb7EQnlI9BA"
+        },
+        {
+          "type": "document",
+          "title": "8-ma'ruza: Tekst hám onıń túrleri",
+          "content": "BQACAgIAAxkDAANiatJymgZ80OTorJfHf9mcq8Uuog8AAmXTAAL1tJhKGVZ8KkpuW389BA"
+        },
+        {
+          "type": "document",
+          "title": "9-ma'ruza: Awızeki sóylew stili hám jazba stil túrleri",
+          "content": "BQACAgIAAxkDAANjatJynOyvTQG2eytOG3xYx5m28IAAAmbTAAL1tJhKQjxg1lRYstU9BA"
+        },
+        {
+          "type": "document",
+          "title": "10-ma'ruza: Tarawlarda qollanılatuǵın is qaǵazları",
+          "content": "BQACAgIAAxkDAANkatJynj--MvlEfU6bs4y6HYIdr30AAmfTAAL1tJhK0gQHSjRkYvQ9BA"
+        },
+        {
+          "type": "document",
+          "title": "11-ma'ruza: Qaraqalpaq tili grammatikası",
+          "content": "BQACAgIAAxkDAANlatJyn7YZfofmn1IBct2-VBrlECQAAmjTAAL1tJhKeUYOXyJfOps9BA"
+        },
+        {
+          "type": "document",
+          "title": "12-ma'ruza: Kásiplik qarım-qatnas procesi",
+          "content": "BQACAgIAAxkDAANmatJyoc82f9tfnzFX8fdzoJq8sloAAmrTAAL1tJhKP_IE267Tupw9BA"
+        }
+      ]
+    },
+    {
+      "labs": [],
+      "name": "🇷🇺 Rus tili",
+      "single": true,
+      "lectures": [
+        {
+          "type": "document",
+          "title": "Тема 1: Позвольте представиться!",
+          "content": "BQACAgIAAxkDAANnatJyouPeWH43N2fEBA2DBbkfAqQAAmzTAAL1tJhKnGkmI9Do6pA9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 2: Русский язык как средство профессионального общения",
+          "content": "BQACAgIAAxkDAANoatJypObP4VZfaiX2nK_HZdxSEDQAAm3TAAL1tJhKqHnT4F2EjEs9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 3: Звуки речи и буквы. Слог и ударение",
+          "content": "BQACAgIAAxkDAANpatJyqGIs_wRQAtmyQ-d1qGJ61j0AAm7TAAL1tJhKtsDd_9hkxds9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 4: Деловая переписка и основные виды документов",
+          "content": "BQACAgIAAxkDAANqatJyqWjfSNeU0rHErdHDnwvFbE0AAm_TAAL1tJhKuNIU_mEkZjU9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 5: Понятие о лексике, лексикологии и слове",
+          "content": "BQACAgIAAxkDAANratJyqwZfKqPb0vxmbTPmYMsGLHsAAnDTAAL1tJhKSrk5SDr0Jz09BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 6: Диалогическая речь в профессиональной деятельности",
+          "content": "BQACAgIAAxkDAANsatJyrXHp7fVMRgjIhBxDTJStJksAAnHTAAL1tJhKQNuc0QJVikA9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 7: Однозначные и многозначные слова",
+          "content": "BQACAgIAAxkDAANtatJyrpJMfuCDjxn-keOuW9bqu6UAAnLTAAL1tJhKSFzkP358l889BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 9: Устаревшие слова и неологизмы",
+          "content": "BQACAgIAAxkDAANuatJysId8Tys5HXg2L5PeQafPc6IAAnPTAAL1tJhKlgjQD5vQkF89BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 10: Фразеологизмы",
+          "content": "BQACAgIAAxkDAANvatJysVxW20fML0lFYAX-j6_hUDMAAnTTAAL1tJhKIViAS1MOYQs9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 11: Резюме и автобиография",
+          "content": "BQACAgIAAxkDAANwatJytKZBy-ZuSElJRxvuAcHCs2MAAnXTAAL1tJhKPrKZVnws6BI9BA"
+        },
+        {
+          "type": "document",
+          "title": "Тема 12: Терминология и источники информации",
+          "content": "BQACAgIAAxkDAANxatJytdBnDN3LmC-ep1eAxDYRtUsAAnbTAAL1tJhKKwIlraTEEtw9BA"
+        }
+      ]
+    }
+  ],
+  "announcements": [
+    {
+      "date": "2026-10-17",
+      "text": "🎉 <b>Jańalıq! Katastr 1-A Hub botı tolıq Qaraqalpaq tiline ótkerildi!</b> ✨\n\nEndi botımızdıń barlıq bólimleri, Mini Qollanbası hám awdarmashısı <b>Qaraqalpaq tilinde</b> isleydi!\n\n📌 <b>Jańa múmkinshilikler:</b>\n• 📚 <b>Pánler (Sabaqlar):</b> Barlıq 7 pánnen lekciya, ámeliy hám laboratoriya PDF materialları\n• 📅 <b>Sabaq kestesi:</b> Búgingi (/bugin), erteńgi (/erten) hám háptelik (/keste) sabaqlar\n• 🌐 <b>Awdarmashı:</b> Qaraqalpaqsha, Ózbekshe, Inglisshe hám Orıssha tez awdarma\n• 👥 <b>Gruppa yordamshısı:</b> Hár kúni azanda 07:30 da sabaq kestesi hám 15 minut aldın esletpe!\n\n🔄 Jańalanıwdı kóriw ushın 👉 /start basıń!"
+    }
+  ],
+  "schedule_until": "2026-11-01",
+  "birthdays": [
+    {
+      "name": "Miyasar",
+      "day": 21,
+      "month": 1,
+      "year": 2001
+    },
+    {
+      "name": "Qarjaw",
+      "day": 24,
+      "month": 1,
+      "year": 2005
+    },
+    {
+      "name": "Nursultan",
+      "day": 25,
+      "month": 2,
+      "year": 2009
+    },
+    {
+      "name": "Tilewbergen",
+      "day": 26,
+      "month": 3,
+      "year": 2008
+    },
+    {
+      "name": "Tawekel",
+      "day": 2,
+      "month": 4,
+      "year": 2008
+    },
+    {
+      "name": "Sunnetulla",
+      "day": 9,
+      "month": 4,
+      "year": 2008
+    },
+    {
+      "name": "Alisher",
+      "day": 26,
+      "month": 5,
+      "year": 2008
+    },
+    {
+      "name": "Sardar",
+      "day": 27,
+      "month": 5,
+      "year": 2008
+    },
+    {
+      "name": "Azizbek",
+      "day": 7,
+      "month": 6,
+      "year": 2008
+    },
+    {
+      "name": "Nurlan",
+      "day": 21,
+      "month": 7,
+      "year": 2005
+    },
+    {
+      "name": "Jaqsiliq",
+      "day": 22,
+      "month": 7,
+      "year": 2008
+    },
+    {
+      "name": "Tursinbek",
+      "day": 31,
+      "month": 7,
+      "year": 2008
+    },
+    {
+      "name": "Aydos",
+      "day": 5,
+      "month": 8,
+      "year": 2008
+    },
+    {
+      "name": "Saydamin",
+      "day": 10,
+      "month": 8,
+      "year": 2008
+    },
+    {
+      "name": "Sharapat",
+      "day": 21,
+      "month": 8,
+      "year": 2008
+    },
+    {
+      "name": "Erbol",
+      "day": 26,
+      "month": 8,
+      "year": 2008
+    },
+    {
+      "name": "Pazilbek",
+      "day": 26,
+      "month": 8,
+      "year": 2007
+    },
+    {
+      "name": "Gulmira",
+      "day": 31,
+      "month": 8,
+      "year": 2008
+    },
+    {
+      "name": "Dawletmurat",
+      "day": 4,
+      "month": 9,
+      "year": 2008
+    },
+    {
+      "name": "Maxsud",
+      "day": 6,
+      "month": 9,
+      "year": 2008
+    },
+    {
+      "name": "Erkebulan",
+      "day": 1,
+      "month": 10,
+      "year": 2008
+    },
+    {
+      "name": "Jasur",
+      "day": 21,
+      "month": 10,
+      "year": 2008
+    },
+    {
+      "name": "Toqtarbay",
+      "day": 26,
+      "month": 10,
+      "year": 2001
+    },
+    {
+      "name": "Esbergen",
+      "day": 2,
+      "month": 11,
+      "year": 2005
+    },
+    {
+      "name": "Hasilbek",
+      "day": 6,
+      "month": 11,
+      "year": 2006
+    },
+    {
+      "name": "Toreniyaz",
+      "day": 8,
+      "month": 11,
+      "year": 2007
+    },
+    {
+      "name": "Arislanbay",
+      "day": 10,
+      "month": 12,
+      "year": 2008
+    },
+    {
+      "name": "Sultanbek",
+      "day": 16,
+      "month": 12,
+      "year": 2003
+    },
+    {
+      "name": "Abbaz",
+      "day": 22,
+      "month": 12,
+      "year": 1998
     }
   ]
 }

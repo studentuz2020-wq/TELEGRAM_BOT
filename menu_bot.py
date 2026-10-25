@@ -87,6 +87,44 @@ def default_mates():
     return mates
 
 
+MONTHS_QQ = [
+    "", "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+    "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr",
+]
+
+BIRTHDAYS = [
+    {"name": "Miyasar", "day": 21, "month": 1, "year": 2001},
+    {"name": "Qarjaw", "day": 24, "month": 1, "year": 2005},
+    {"name": "Nursultan", "day": 25, "month": 2, "year": 2009},
+    {"name": "Tilewbergen", "day": 26, "month": 3, "year": 2008},
+    {"name": "Tawekel", "day": 2, "month": 4, "year": 2008},
+    {"name": "Sunnetulla", "day": 9, "month": 4, "year": 2008},
+    {"name": "Alisher", "day": 26, "month": 5, "year": 2008},
+    {"name": "Sardar", "day": 27, "month": 5, "year": 2008},
+    {"name": "Azizbek", "day": 7, "month": 6, "year": 2008},
+    {"name": "Nurlan", "day": 21, "month": 7, "year": 2005},
+    {"name": "Jaqsiliq", "day": 22, "month": 7, "year": 2008},
+    {"name": "Tursinbek", "day": 31, "month": 7, "year": 2008},
+    {"name": "Aydos", "day": 5, "month": 8, "year": 2008},
+    {"name": "Saydamin", "day": 10, "month": 8, "year": 2008},
+    {"name": "Sharapat", "day": 21, "month": 8, "year": 2008},
+    {"name": "Erbol", "day": 26, "month": 8, "year": 2008},
+    {"name": "Pazilbek", "day": 26, "month": 8, "year": 2007},
+    {"name": "Gulmira", "day": 31, "month": 8, "year": 2008},
+    {"name": "Dawletmurat", "day": 4, "month": 9, "year": 2008},
+    {"name": "Maxsud", "day": 6, "month": 9, "year": 2008},
+    {"name": "Erkebulan", "day": 1, "month": 10, "year": 2008},
+    {"name": "Jasur", "day": 21, "month": 10, "year": 2008},
+    {"name": "Toqtarbay", "day": 26, "month": 10, "year": 2001},
+    {"name": "Esbergen", "day": 2, "month": 11, "year": 2005},
+    {"name": "Hasilbek", "day": 6, "month": 11, "year": 2006},
+    {"name": "Toreniyaz", "day": 8, "month": 11, "year": 2007},
+    {"name": "Arislanbay", "day": 10, "month": 12, "year": 2008},
+    {"name": "Sultanbek", "day": 16, "month": 12, "year": 2003},
+    {"name": "Abbaz", "day": 22, "month": 12, "year": 1998},
+]
+
+
 # ---------- Saqlash ----------
 def default_data():
     return {
@@ -120,6 +158,7 @@ def default_data():
                 ]
             ],
         ],
+        "schedule_until": "2026-11-01",
         "schedule": {
             "0": [
                 {
@@ -129,14 +168,6 @@ def default_data():
                     "type": "Ma'ruza",
                     "teacher": "SARIBAYEVA N. B.",
                     "room": "",
-                },
-                {
-                    "time": "10:00",
-                    "end": "11:20",
-                    "name": "Rus tili",
-                    "type": "Amaliy",
-                    "teacher": "DJOLDASOVA S. A.",
-                    "room": "308 3-korpus",
                 },
                 {
                     "time": "11:30",
@@ -151,17 +182,25 @@ def default_data():
                 {
                     "time": "08:30",
                     "end": "09:50",
-                    "name": "Qoraqalpoq tili",
-                    "type": "Amaliy",
-                    "teacher": "KUNNAZAROVA SH. M.",
-                    "room": "",
+                    "name": "Geodeziya 1 bo'lim",
+                    "type": "Ma'ruza",
+                    "teacher": "KALIMBETOV J. B.",
+                    "room": "308 3-korpus",
                 },
                 {
                     "time": "10:00",
                     "end": "11:20",
-                    "name": "Rus tili",
+                    "name": "Chet (inglis) tili",
                     "type": "Amaliy",
-                    "teacher": "DJOLDASOVA S. A.",
+                    "teacher": "ABDULLAEV M. A.",
+                    "room": "308 3-korpus",
+                },
+                {
+                    "time": "11:30",
+                    "end": "12:50",
+                    "name": "Geodeziya 1 bo'lim",
+                    "type": "Amaliy",
+                    "teacher": "KALIMBETOV J. B.",
                     "room": "308 3-korpus",
                 },
             ],
@@ -182,8 +221,24 @@ def default_data():
                     "teacher": "BEKIYEV A. B.",
                     "room": "308 3-korpus",
                 },
+                {
+                    "time": "11:30",
+                    "end": "12:50",
+                    "name": "Qoraqalpoq tili",
+                    "type": "Amaliy",
+                    "teacher": "KUNNAZAROVA SH. M.",
+                    "room": "",
+                },
             ],
             "3": [
+                {
+                    "time": "08:30",
+                    "end": "09:50",
+                    "name": "Chet (inglis) tili",
+                    "type": "Amaliy",
+                    "teacher": "ABDULLAEV M. A.",
+                    "room": "308 3-korpus",
+                },
                 {
                     "time": "10:00",
                     "end": "11:20",
@@ -213,18 +268,42 @@ def default_data():
                 {
                     "time": "10:00",
                     "end": "11:20",
-                    "name": "Fizika",
-                    "type": "Laboratoriya",
-                    "teacher": "SAPARNIYAZOVA G. K.",
-                    "room": "",
+                    "name": "Chet (inglis) tili",
+                    "type": "Amaliy",
+                    "teacher": "ABDULLAEV M. A.",
+                    "room": "308 3-korpus",
+                },
+                {
+                    "time": "11:30",
+                    "end": "12:50",
+                    "name": "Geodeziya 1 bo'lim",
+                    "type": "Ma'ruza",
+                    "teacher": "KALIMBETOV J. B.",
+                    "room": "308 3-korpus",
                 },
             ],
             "5": [],
             "6": [],
         },
-        "announcements": [],
+        "announcements": [
+            {
+                "date": "2026-10-17",
+                "text": (
+                    "🎉 <b>Jańalıq! Katastr 1-A Hub botı tolıq Qaraqalpaq tiline ótkerildi!</b> ✨\n\n"
+                    "Endi botımızdıń barlıq bólimleri, Mini Qollanbası hám awdarmashısı "
+                    "<b>Qaraqalpaq tilinde</b> isleydi!\n\n"
+                    "📌 <b>Jańa múmkinshilikler:</b>\n"
+                    "• 📚 <b>Pánler (Sabaqlar):</b> Barlıq 7 pánnen lekciya, ámeliy hám laboratoriya PDF materialları\n"
+                    "• 📅 <b>Sabaq kestesi:</b> Búgingi (/bugin), erteńgi (/erten) hám háptelik (/keste) sabaqlar\n"
+                    "• 🌐 <b>Awdarmashı:</b> Qaraqalpaqsha, Ózbekshe, Inglisshe hám Orıssha tez awdarma\n"
+                    "• 👥 <b>Gruppa yordamshısı:</b> Hár kúni azanda 07:30 da sabaq kestesi hám 15 minut aldın esletpe!\n\n"
+                    "🔄 Jańalanıwdı kóriw ushın 👉 /start basıń!"
+                ),
+            }
+        ],
         "exams": [],
         "mates": default_mates(),
+        "birthdays": BIRTHDAYS,
         "groups": {},
     }
 
@@ -268,9 +347,13 @@ def cloud_save(snapshot):
 def _upgrade_data(data):
     """Agar bazada eski namuna jadval qolib ketgan bo'lsa, yangisiga almashtiradi."""
     d = default_data()
-    sch0 = (data.get("schedule") or {}).get("0") or []
-    if len(sch0) == 2 and sch0[0].get("name") == "Fizika" and not sch0[0].get("teacher"):
+    if data.get("schedule_until") != d.get("schedule_until"):
         data["schedule"] = d["schedule"]
+        data["schedule_until"] = d["schedule_until"]
+    if not data.get("announcements"):
+        data["announcements"] = d["announcements"]
+    if not data.get("birthdays"):
+        data["birthdays"] = BIRTHDAYS
     data.setdefault("groups", {})
     return data
 
@@ -419,6 +502,7 @@ def main_menu(uid=None, chat_type="private"):
         btn("📝 Imtixanlar", "menu_exams"),
         btn("📢 Daǵazalar", "menu_ann"),
         btn("👥 Gruppalaslar", "menu_mates"),
+        btn("🎂 Tuwılǵan kúnler", "menu_birthdays"),
         btn("👤 Profilim", "menu_profile"),
         btn("ℹ️ Maǵlıwmat", "menu_info"),
     ]
@@ -464,6 +548,7 @@ def group_welcome_text():
         "• 📚 <i>«fizika pdf»</i>, <i>«matematika»</i>, <i>«geodeziya»</i>, <i>«tariyx»</i>, "
         "<i>«qaraqalpaq tili»</i>, <i>«ingliz tili»</i>, <i>«rus tili»</i> deseńiz — lekciya hám ámeliy PDF fayllardı beremen\n"
         "• 👩‍🏫 <i>«kurator nomeri»</i>, <i>«starosta nomeri»</i>, <i>«gruppa dizimi»</i> deseńiz — maǵlıwmat shıǵaraman\n"
+        "• 🎂 <i>«tuwılǵan kúnler»</i> deseńiz — gruppalaslardıń tuwılǵan kúnlerin shıǵaraman\n"
         "• 🌐 Xabarǵa <i>Reply</i> qılıp <code>/tr</code> jazsańız — awdarma (tarjima) qılaman!"
         + creator_footer()
     )
@@ -531,6 +616,7 @@ def help_cmd(message):
         "/erten (/ertaga) - erteńgi sabaqlar\n"
         "/keste (/week) - háptelik sabaq kestesi\n"
         "/fanlar (/sabaqlar) - PDF hám lekciyalar\n"
+        "/tuwilgankun (/bday) - tuwılǵan kúnler\n"
         "/tr - awdarma (tarjima)\n"
         "/profile - profilim\n"
         "/myid - Telegram ID",
@@ -582,6 +668,16 @@ def profile_cmd(message):
     bot.send_message(message.chat.id, t, reply_markup=m)
 
 
+@bot.message_handler(commands=["tuwilgankun", "bday", "tugilgankun"])
+def bday_cmd(message):
+    register_group(message.chat)
+    bot.send_message(
+        message.chat.id,
+        birthdays_text(),
+        reply_markup=kb(btn("🏠 Bas menyu", "back_to_main")),
+    )
+
+
 @bot.message_handler(commands=["admin"])
 def admin_cmd(message):
     register_group(message.chat)
@@ -592,6 +688,23 @@ def admin_cmd(message):
 
 
 # ---------- Jadval ----------
+def is_schedule_expired():
+    until = DATA.get("schedule_until")
+    if not until:
+        return False
+    try:
+        exp_date = datetime.strptime(until, "%Y-%m-%d").date()
+        return datetime.now(TZ).date() > exp_date
+    except Exception:
+        return False
+
+
+def active_schedule():
+    if is_schedule_expired():
+        return {str(i): [] for i in range(7)}
+    return DATA.get("schedule", {})
+
+
 def fmt_lesson(x):
     t = f"{x['time']} - {x['end']}" if x.get("end") else x["time"]
     tp = f" ({html.escape(x['type'])})" if x.get("type") else ""
@@ -607,20 +720,31 @@ def fmt_lesson(x):
 
 
 def fmt_day(i):
-    items = sorted(DATA["schedule"].get(str(i), []), key=lambda x: x["time"])
+    if is_schedule_expired():
+        return "⏳ <i>Bul hápte ushın maǵlıwmat ele kiritilmegen.</i>"
+    items = sorted(active_schedule().get(str(i), []), key=lambda x: x["time"])
     if not items:
         return "— sabaq joq"
     return "\n".join(fmt_lesson(x) for x in items)
 
 
 def week_text():
+    if is_schedule_expired():
+        return (
+            header("📅", "Háptelik sabaq kestesi")
+            + "⏳ <i>Bul hápte ushın sabaq kestesi ele kiritilmegen (Maǵlıwmat ele kiritilmegen).</i>"
+        )
+    sch = active_schedule()
     days = [
         f"<b>{DAYS_QQ[i]}</b>\n{fmt_day(i)}"
         for i in range(7)
-        if DATA["schedule"].get(str(i))
+        if sch.get(str(i))
     ]
     if not days:
-        return header("📅", "Háptelik sabaq kestesi") + "Keste ele kiritilmegen."
+        return (
+            header("📅", "Háptelik sabaq kestesi")
+            + "⏳ <i>Bul hápte ushın sabaq kestesi ele kiritilmegen (Maǵlıwmat ele kiritilmegen).</i>"
+        )
     return header("📅", "Háptelik sabaq kestesi") + "\n\n".join(days)
 
 
@@ -636,6 +760,67 @@ def today_text():
 def tomorrow_text():
     i = (datetime.now(TZ).weekday() + 1) % 7
     return header("📅", f"Erteńgi sabaqlar — {DAYS_QQ[i]}") + fmt_day(i)
+
+
+# ---------- Tuwılǵan kúnler ----------
+def _bday_days_left(b, today=None):
+    if today is None:
+        today = datetime.now(TZ).date()
+    m, d = int(b["month"]), int(b["day"])
+    try:
+        nxt = datetime(today.year, m, d).date()
+    except ValueError:
+        nxt = datetime(today.year, m, 28).date()
+    if nxt < today:
+        try:
+            nxt = datetime(today.year + 1, m, d).date()
+        except ValueError:
+            nxt = datetime(today.year + 1, m, 28).date()
+    left = (nxt - today).days
+    age = nxt.year - int(b["year"])
+    return left, age
+
+
+def birthdays_text():
+    today = datetime.now(TZ).date()
+    bdays = DATA.get("birthdays") or BIRTHDAYS
+    enriched = []
+    for b in bdays:
+        left, age = _bday_days_left(b, today)
+        enriched.append((left, age, b))
+    enriched.sort(key=lambda x: (x[0], x[2]["name"]))
+
+    out = [header("🎂", f"Tuwılǵan kúnler — {html.escape(DATA['group'])}")]
+
+    today_list = [x for x in enriched if x[0] == 0]
+    if today_list:
+        out.append("🎉 <b>BÚGIN TUWÍLǴAN KÚNI:</b>")
+        for _, age, b in today_list:
+            mname = MONTHS_QQ[b["month"]].lower()
+            out.append(f"🥳 <b>{html.escape(b['name'])}</b> — {b['day']}-{mname} {b['year']} ({age} jas!) 🎂")
+        out.append("")
+
+    upcoming = [x for x in enriched if x[0] > 0][:3]
+    if upcoming:
+        out.append("⏳ <b>Eń jaqın tuwılǵan kúnler:</b>")
+        for left, age, b in upcoming:
+            mname = MONTHS_QQ[b["month"]].lower()
+            when = "erteń! 🔥" if left == 1 else f"{left} kún qaldı"
+            out.append(
+                f"• <b>{html.escape(b['name'])}</b> — {b['day']}-{mname} ({age} jas, ⏳ {when})"
+            )
+        out.append(LINE)
+
+    for m_idx in range(1, 13):
+        m_items = [b for b in bdays if int(b["month"]) == m_idx]
+        if not m_items:
+            continue
+        m_items.sort(key=lambda x: int(x["day"]))
+        out.append(f"📅 <b>{m_idx}. {MONTHS_QQ[m_idx]}</b>")
+        m_lower = MONTHS_QQ[m_idx].lower()
+        for b in m_items:
+            out.append(f"  • <b>{html.escape(b['name'])}</b> — {b['day']}-{m_lower} {b['year']}")
+    return "\n".join(out)
 
 
 # ---------- Profil ----------
@@ -752,9 +937,18 @@ def step_sched(message, day):
         ask(message.chat.id, "Format noto'g'ri. Misol:\n09:00 Fizika\n10:30 Matematika",
             step_sched, day)
         return
+    if is_schedule_expired():
+        DATA["schedule"] = {str(i): [] for i in range(7)}
     DATA["schedule"][str(day)] = items
+    today_d = datetime.now(TZ).date()
+    days_ahead = (6 - today_d.weekday()) if today_d.weekday() < 6 else 7
+    DATA["schedule_until"] = (today_d + timedelta(days=days_ahead)).strftime("%Y-%m-%d")
     save()
-    bot.send_message(message.chat.id, f"✅ {DAYS[day]} jadvali yangilandi.", reply_markup=admin_menu())
+    bot.send_message(
+        message.chat.id,
+        f"✅ {DAYS_QQ[day]} kestesi jańalandı (ámelde: {DATA['schedule_until']} shekem).",
+        reply_markup=admin_menu(),
+    )
 
 
 def step_ann(message):
@@ -1000,7 +1194,11 @@ def callback_handler(call):
                 line += f" — {m['phone']}"
             lines.append(line)
         show(call, header("👥", f"Gruppalaslar — {html.escape(DATA['group'])}") + "\n".join(lines),
-             kb(btn("⬅️ Artqa", "back_to_main")))
+             kb(btn("🎂 Tuwılǵan kúnler", "menu_birthdays"), btn("⬅️ Artqa", "back_to_main")))
+
+    elif data == "menu_birthdays":
+        show(call, birthdays_text(),
+             kb(btn("👥 Gruppalaslar", "menu_mates"), btn("⬅️ Artqa", "back_to_main")))
 
     elif data == "menu_profile":
         register_user(call.from_user)
@@ -1401,6 +1599,35 @@ def try_smart_assistant(message):
         bot.reply_to(message, header("📝", "Imtixanlar") + body)
         return True
 
+    # 6.5. Tuwılǵan kúnler (umumiy yoki aniq ism bo'yicha)
+    bday_triggers = {
+        "tuwilgan", "tugilgan", "tuilgan", "rojdeniya", "bday",
+        "tuwildi", "tugildi", "jasqa", "yoshga",
+    }
+    if (words & bday_triggers) or "tuwilgan kun" in ntext or "tugilgan kun" in ntext:
+        bdays = DATA.get("birthdays") or BIRTHDAYS
+        matched = [b for b in bdays if norm_qq(b["name"]) in ntext]
+        if matched:
+            today = datetime.now(TZ).date()
+            lines = []
+            for b in matched:
+                left, age = _bday_days_left(b, today)
+                mname = MONTHS_QQ[b["month"]].lower()
+                status = "🎉 <b>Búgin tuwılǵan kúni!</b>" if left == 0 else (
+                    f"⏳ Erteń ({age} jasqa toladı)" if left == 1 else f"⏳ {left} kún qaldı ({age} jasqa toladı)"
+                )
+                lines.append(
+                    f"🎂 <b>{html.escape(b['name'])}</b> — <b>{b['day']}-{mname} {b['year']}</b>\n{status}"
+                )
+            bot.reply_to(
+                message,
+                "\n\n".join(lines),
+                reply_markup=kb(btn("🎂 Barlıq tuwılǵan kúnler", "menu_birthdays")),
+            )
+            return True
+        bot.reply_to(message, birthdays_text())
+        return True
+
     # 7. Guruhda "bot awdar ..." yoki "bot tarjima ..."
     if is_group and ("awdar" in words or "tarjima" in words) and ("bot" in words or message.reply_to_message):
         target = message.reply_to_message.text if message.reply_to_message else message.text
@@ -1467,7 +1694,42 @@ def reminder_loop():
             today_str = now.strftime("%Y-%m-%d")
             now_hm = now.strftime("%H:%M")
             wday = now.weekday()
-            today_lessons = DATA["schedule"].get(str(wday), [])
+            today_lessons = active_schedule().get(str(wday), [])
+
+            # 0) Har kuni ertalab 07:30 da tug'ilgan kun tabrigi (agar bugun kimningdir tug'ilgan kuni bo'lsa)
+            bday_key = (today_str, "BDAY_0730")
+            if now_hm == MORNING_TIME and bday_key not in sent:
+                sent.add(bday_key)
+                bdays = DATA.get("birthdays") or BIRTHDAYS
+                todays_bdays = [
+                    b for b in bdays
+                    if int(b["day"]) == now.day and int(b["month"]) == now.month
+                ]
+                if todays_bdays:
+                    names_lines = []
+                    for b in todays_bdays:
+                        age = now.year - int(b["year"])
+                        names_lines.append(f"🥳 <b>{html.escape(b['name'])}</b> ({age} jas!)")
+                    bday_msg = (
+                        f"🎉🎂 <b>QUTLÍQLAYMÍZ! BÚGIN TUWÍLǴAN KÚN!</b> 🎂🎉\n"
+                        f"{LINE}\n"
+                        f"Búgin <b>{html.escape(DATA['group'])}</b> gruppalasımız:\n"
+                        + "\n".join(names_lines)
+                        + "\n\n✨ Sizge uzaq ómir, bekem densawlıq, oqıwlarıńızda úlken tabıslar hám "
+                        "barlıq jaqsı niyetlerińizge jetiwińizdi tileymiz! Tuwılǵan kúnińiz qutlı bolsın! 🥳🎁🎈"
+                    )
+                    for gid, g in list(DATA.get("groups", {}).items()):
+                        if g.get("remind", True):
+                            try:
+                                bot.send_message(int(gid), bday_msg)
+                            except Exception:
+                                pass
+                    for uid, u in list(DATA["users"].items()):
+                        if u.get("remind", True):
+                            try:
+                                bot.send_message(int(uid), bday_msg)
+                            except Exception:
+                                pass
 
             # 1) Har kuni ertalab 07:30 da dars bor kunlari guruhlarga va obunachilarga jadval yuborish
             morning_key = (today_str, "MORNING_0730")
@@ -1562,10 +1824,13 @@ def start_health_server():
                     payload = {
                         "group": DATA.get("group", "Katastr 1-a"),
                         "subjects": DATA.get("subjects", []),
-                        "schedule": DATA.get("schedule", {}),
+                        "schedule": active_schedule(),
+                        "schedule_expired": is_schedule_expired(),
+                        "schedule_until": DATA.get("schedule_until", ""),
                         "announcements": DATA.get("announcements", []),
                         "exams": DATA.get("exams", []),
                         "mates": DATA.get("mates", []),
+                        "birthdays": DATA.get("birthdays", BIRTHDAYS),
                         "leaders": {
                             "curator": CURATOR,
                             "starosta": STAROSTA,
@@ -1637,11 +1902,12 @@ if __name__ == "__main__":
          "🎓 Katastr 1-A Hub — guruh uchun shaxsiy yordamchi:\n"
          "📚 fanlar va ma'ruzalar\n📅 dars jadvali va eslatmalar\n🌐 tarjimon\n📝 imtihonlar\n📢 e'lonlar"),
         (bot.set_my_commands, [
-            types.BotCommand("start", "🏠 Bosh menyu"),
-            types.BotCommand("bugin", "🕒 Búgingi sabaqlar (Bugungi darslar)"),
-            types.BotCommand("erten", "📆 Erteńgi sabaqlar (Ertangi darslar)"),
+            types.BotCommand("start", "🏠 Bas menyu"),
+            types.BotCommand("bugin", "🕒 Búgingi sabaqlar"),
+            types.BotCommand("erten", "📆 Erteńgi sabaqlar"),
             types.BotCommand("keste", "📅 Háptelik sabaq kestesi"),
-            types.BotCommand("fanlar", "📚 Fanlar hám PDF materiallar"),
+            types.BotCommand("fanlar", "📚 Pánler hám PDF materiallar"),
+            types.BotCommand("tuwilgankun", "🎂 Tuwılǵan kúnler"),
             types.BotCommand("tr", "🌐 Awdarma / Tarjima"),
         ]),
     ]:
